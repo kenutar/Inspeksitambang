@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>INSPEKSI TAMBANG 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+<style>
+:root {
+  --ore:#C8873A; --ore-l:#E5A85A; --ore-d:#8A5820;
+  --coal:#141414; --rock:#222; --plate:#2A2A2A; --slate:#383838;
+  --line:#444; --dust:#666; --ash:#999; --mist:#E0DBD0;
+  --white:#FAF7F2;
+  --low:#4A8C5C; --low-bg:rgba(74,140,92,.12); --low-b:rgba(74,140,92,.35);
+  --med:#C8A030; --med-bg:rgba(200,160,48,.12); --med-b:rgba(200,160,48,.35);
+  --high:#C94040; --high-bg:rgba(201,64,64,.12); --high-b:rgba(201,64,64,.35);
+  --info:#4A7FA8;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;}
+body{background:var(--coal);color:var(--mist);font-family:'DM Sans',sans-serif;display:flex;flex-direction:column;}
+
+/* ── TOP NAV ── */
+.topnav{display:flex;align-items:center;gap:0;background:var(--rock);border-bottom:1px solid var(--slate);flex-shrink:0;z-index:100;}
+.nav-brand{display:flex;align-items:center;gap:12px;padding:14px 24px;border-right:1px solid var(--slate);}
+.nav-hex{width:34px;height:34px;background:var(--ore);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.nav-brand-text h1{font-family:'Syne',sans-serif;font-weight:800;font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:var(--white);}
+.nav-brand-text p{font-family:'DM Mono',monospace;font-size:9px;color:var(--ore);letter-spacing:.08em;text-transform:uppercase;}
+.nav-tabs{display:flex;flex:1;}
+.nav-tab{display:flex;align-items:center;gap:7px;padding:0 22px;height:56px;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--dust);transition:all .15s;white-space:nowrap;}
+.nav-tab:hover{color:var(--mist);background:rgba(255,255,255,.03);}
+.nav-tab.active{color:var(--ore);border-bottom-color:var(--ore);background:rgba(200,135,58,.06);}
+.nav-tab .tab-icon{font-size:14px;}
+.nav-tab .badge{background:var(--ore);color:var(--coal);font-size:9px;padding:1px 5px;border-radius:8px;font-weight:700;}
+.nav-right{padding:0 20px;display:flex;align-items:center;gap:10px;border-left:1px solid var(--slate);}
+.session-info{font-family:'DM Mono',monospace;font-size:10px;color:var(--dust);text-align:right;line-height:1.7;}
+.session-info b{color:var(--ore);}
+
+/* ── MAIN LAYOUT ── */
+.main{display:flex;flex:1;overflow:hidden;}
+
+/* ── PAGE SYSTEM ── */
+.page{display:none;flex:1;overflow-y:auto;flex-direction:column;}
+.page.active{display:flex;}
+
+/* ══════════════════════════════════════════
+   PAGE 1 — SETUP
+══════════════════════════════════════════ */
+.setup-wrap{max-width:540px;margin:0 auto;padding:48px 24px;}
+.setup-wrap h2{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--white);margin-bottom:4px;}
+.setup-wrap .sub{font-size:13px;color:var(--dust);margin-bottom:32px;}
+.form-group{margin-bottom:18px;}
+.form-group label{display:block;font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--ash);margin-bottom:6px;}
+.form-group input,.form-group select{width:100%;background:var(--plate);border:1px solid var(--slate);color:var(--mist);font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 14px;border-radius:5px;outline:none;transition:border-color .2s;}
+.form-group input:focus,.form-group select:focus{border-color:var(--ore);}
+.form-group input::placeholder{color:var(--dust);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--ore);color:var(--coal);font-family:'DM Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:12px 24px;border:none;border-radius:5px;cursor:pointer;transition:background .15s;width:100%;justify-content:center;margin-top:8px;}
+.btn-primary:hover{background:var(--ore-l);}
+.btn-ghost{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--ash);font-family:'DM Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:10px 20px;border:1px solid var(--slate);border-radius:5px;cursor:pointer;transition:all .15s;}
+.btn-ghost:hover{border-color:var(--ore);color:var(--ore);}
+.btn-danger{background:var(--high);color:white;}
+.btn-danger:hover{background:#a83030;}
+.divider{height:1px;background:var(--slate);margin:28px 0;}
+
+/* ══════════════════════════════════════════
+   PAGE 2 — SELECT FACILITIES
+══════════════════════════════════════════ */
+.select-wrap{display:grid;grid-template-columns:1fr 1fr;gap:0;flex:1;overflow:hidden;}
+.fac-list-panel{border-right:1px solid var(--slate);display:flex;flex-direction:column;overflow:hidden;}
+.panel-header{padding:20px 24px 14px;border-bottom:1px solid var(--slate);flex-shrink:0;}
+.panel-header h3{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--white);margin-bottom:10px;}
+.search-row{display:flex;gap:8px;}
+.search-inp{flex:1;background:var(--plate);border:1px solid var(--slate);color:var(--mist);font-family:'DM Sans',sans-serif;font-size:12px;padding:7px 12px;border-radius:4px;outline:none;}
+.search-inp:focus{border-color:var(--ore);}
+.search-inp::placeholder{color:var(--dust);}
+.fac-scroll{flex:1;overflow-y:auto;padding:6px 0;scrollbar-width:thin;scrollbar-color:var(--slate) transparent;}
+.fac-row{display:flex;align-items:center;gap:10px;padding:9px 20px;cursor:pointer;transition:background .12s;border-left:3px solid transparent;}
+.fac-row:hover{background:rgba(200,135,58,.07);}
+.fac-row.selected{background:rgba(200,135,58,.13);border-left-color:var(--ore);}
+.fac-cb{width:16px;height:16px;border:1.5px solid var(--slate);border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;transition:all .12s;}
+.fac-row.selected .fac-cb{background:var(--ore);border-color:var(--ore);color:var(--coal);}
+.fac-code{font-family:'DM Mono',monospace;font-size:10px;color:var(--ore);min-width:22px;}
+.fac-name{font-size:12px;color:var(--mist);flex:1;}
+.fac-n{font-family:'DM Mono',monospace;font-size:9px;color:var(--dust);background:var(--rock);padding:1px 5px;border-radius:6px;}
+.has-dot{width:5px;height:5px;background:var(--ore);border-radius:50%;opacity:.6;}
+
+.fac-right-panel{display:flex;flex-direction:column;overflow:hidden;}
+.selected-summary{padding:20px 24px;border-bottom:1px solid var(--slate);flex-shrink:0;}
+.selected-summary h3{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px;}
+.selected-summary p{font-size:12px;color:var(--dust);}
+.selected-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;max-height:120px;overflow-y:auto;}
+.chip{display:inline-flex;align-items:center;gap:5px;background:rgba(200,135,58,.15);border:1px solid rgba(200,135,58,.35);color:var(--ore-l);font-family:'DM Mono',monospace;font-size:10px;padding:3px 8px;border-radius:3px;}
+.chip .remove-chip{cursor:pointer;opacity:.6;font-size:11px;}
+.chip .remove-chip:hover{opacity:1;}
+.start-btn-wrap{padding:16px 24px;border-top:1px solid var(--slate);flex-shrink:0;margin-top:auto;}
+
+/* ══════════════════════════════════════════
+   PAGE 3 — INSPECT
+══════════════════════════════════════════ */
+.inspect-layout{display:grid;grid-template-columns:260px 1fr;flex:1;overflow:hidden;}
+.inspect-sidebar{border-right:1px solid var(--slate);display:flex;flex-direction:column;overflow:hidden;background:var(--rock);}
+.inspect-fac-list{flex:1;overflow-y:auto;padding:4px 0;scrollbar-width:thin;scrollbar-color:var(--slate) transparent;}
+.inspect-fac-btn{display:flex;align-items:center;gap:9px;width:100%;padding:10px 16px;background:none;border:none;border-left:3px solid transparent;cursor:pointer;text-align:left;transition:all .12s;}
+.inspect-fac-btn:hover{background:rgba(200,135,58,.07);}
+.inspect-fac-btn.active{background:rgba(200,135,58,.14);border-left-color:var(--ore);}
+.inspect-fac-btn .if-code{font-family:'DM Mono',monospace;font-size:10px;color:var(--ore);min-width:22px;}
+.inspect-fac-btn .if-name{font-size:12px;color:var(--mist);flex:1;line-height:1.3;}
+.inspect-fac-btn.active .if-name{color:var(--white);font-weight:500;}
+.finding-count{font-family:'DM Mono',monospace;font-size:9px;padding:2px 5px;border-radius:6px;flex-shrink:0;}
+.finding-count.has{background:var(--high-bg);color:var(--high);border:1px solid var(--high-b);}
+.finding-count.ok{background:var(--low-bg);color:var(--low);border:1px solid var(--low-b);}
+.finding-count.none{background:var(--plate);color:var(--dust);}
+
+.inspect-main{display:flex;flex-direction:column;overflow:hidden;}
+.inspect-header{padding:18px 28px 14px;border-bottom:1px solid var(--slate);flex-shrink:0;}
+.inspect-header-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;}
+.inspect-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--white);line-height:1.1;}
+.inspect-header-badges{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+.ihb{font-family:'DM Mono',monospace;font-size:9px;padding:3px 8px;border-radius:3px;letter-spacing:.05em;}
+.ihb-code{background:var(--ore);color:var(--coal);}
+.ihb-items{background:var(--plate);color:var(--ash);border:1px solid var(--slate);}
+.ihb-findings{color:var(--high);background:var(--high-bg);border:1px solid var(--high-b);}
+
+.inspect-content{flex:1;overflow-y:auto;padding:20px 28px;scrollbar-width:thin;scrollbar-color:var(--slate) transparent;}
+
+/* Item cards */
+.item-card{background:var(--plate);border:1px solid var(--line);border-radius:6px;margin-bottom:10px;overflow:hidden;transition:border-color .15s;}
+.item-card:hover{border-color:var(--slate);}
+.item-card.has-finding{border-color:rgba(201,64,64,.4);}
+.item-card.compliant{border-color:rgba(74,140,92,.35);}
+.item-top{display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;}
+.item-num{font-family:'DM Mono',monospace;font-size:10px;color:var(--ore);min-width:22px;}
+.item-label{font-size:13px;color:var(--mist);flex:1;line-height:1.4;}
+.item-status-badge{font-family:'DM Mono',monospace;font-size:9px;padding:2px 7px;border-radius:3px;flex-shrink:0;}
+.status-ok{background:var(--low-bg);color:var(--low);border:1px solid var(--low-b);}
+.status-find{background:var(--high-bg);color:var(--high);border:1px solid var(--high-b);}
+.status-na{background:var(--plate);color:var(--dust);border:1px solid var(--slate);}
+.item-expand{font-size:11px;color:var(--dust);transition:transform .15s;flex-shrink:0;}
+.item-card.open .item-expand{transform:rotate(180deg);}
+.item-body{display:none;padding:0 16px 16px;border-top:1px solid var(--line);}
+.item-card.open .item-body{display:block;}
+
+.status-row{display:flex;gap:6px;margin:12px 0 10px;}
+.stn-btn{display:flex;align-items:center;gap:5px;padding:7px 12px;border:1.5px solid var(--slate);border-radius:4px;background:none;cursor:pointer;font-family:'DM Mono',monospace;font-size:10px;color:var(--ash);transition:all .15s;font-weight:500;}
+.stn-btn:hover{border-color:var(--ore);color:var(--mist);}
+.stn-btn.active-ok{background:var(--low-bg);border-color:var(--low);color:var(--low);}
+.stn-btn.active-find{background:var(--high-bg);border-color:var(--high);color:var(--high);}
+.stn-btn.active-na{background:var(--plate);border-color:var(--ash);color:var(--ash);}
+
+.severity-row{display:flex;gap:6px;margin-bottom:10px;}
+.sev-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--ash);display:flex;align-items:center;margin-right:4px;}
+.sev-btn{padding:5px 11px;border-radius:4px;border:1.5px solid var(--slate);background:none;cursor:pointer;font-family:'DM Mono',monospace;font-size:10px;color:var(--ash);transition:all .15s;}
+.sev-btn:hover{border-color:var(--ore);}
+.sev-btn.active-low{background:var(--low-bg);border-color:var(--low);color:var(--low);}
+.sev-btn.active-med{background:var(--med-bg);border-color:var(--med);color:var(--med);}
+.sev-btn.active-high{background:var(--high-bg);border-color:var(--high);color:var(--high);}
+
+.notes-inp{width:100%;background:var(--rock);border:1px solid var(--slate);color:var(--mist);font-family:'DM Sans',sans-serif;font-size:12px;padding:8px 11px;border-radius:4px;resize:vertical;min-height:64px;outline:none;margin-bottom:6px;}
+.notes-inp:focus{border-color:var(--ore);}
+.notes-inp::placeholder{color:var(--dust);}
+.reco-wrap{display:none;margin-bottom:10px;}
+.reco-wrap.show{display:block;}
+.reco-label{font-family:'DM Mono',monospace;font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--low);margin-bottom:4px;display:flex;align-items:center;gap:5px;}
+.reco-label::before{content:'→';font-size:11px;}
+.reco-inp{width:100%;background:rgba(74,140,92,.07);border:1px solid rgba(74,140,92,.3);color:var(--mist);font-family:'DM Sans',sans-serif;font-size:12px;padding:8px 11px;border-radius:4px;resize:vertical;min-height:52px;outline:none;}
+.reco-inp:focus{border-color:var(--low);}
+.reco-inp::placeholder{color:var(--dust);}
+/* export dropdown */
+.export-wrap{position:relative;display:inline-block;}
+.export-dropdown{display:none;position:absolute;bottom:calc(100% + 6px);left:0;background:var(--plate);border:1px solid var(--slate);border-radius:6px;min-width:220px;z-index:200;overflow:hidden;box-shadow:0 -8px 24px rgba(0,0,0,.4);}
+.export-dropdown.open{display:block;animation:fadeUp .15s ease;}
+.export-opt{display:flex;align-items:center;gap:10px;padding:11px 16px;cursor:pointer;font-family:'DM Mono',monospace;font-size:11px;color:var(--ash);transition:background .12s;border-bottom:1px solid var(--slate);}
+.export-opt:last-child{border-bottom:none;}
+.export-opt:hover{background:rgba(200,135,58,.1);color:var(--mist);}
+.export-opt .eo-icon{font-size:16px;flex-shrink:0;}
+.export-opt .eo-label{flex:1;}
+.export-opt .eo-ext{font-size:9px;color:var(--dust);background:var(--rock);padding:1px 5px;border-radius:3px;}
+
+/* rules inline */
+.rules-toggle{font-family:'DM Mono',monospace;font-size:10px;color:var(--ore);cursor:pointer;display:inline-flex;align-items:center;gap:5px;padding:4px 0;border:none;background:none;letter-spacing:.05em;}
+.rules-toggle:hover{color:var(--ore-l);}
+.inline-rules{margin-top:8px;padding:10px 14px;background:var(--rock);border:1px solid var(--slate);border-radius:4px;font-size:11px;color:var(--ash);line-height:1.6;display:none;max-height:180px;overflow-y:auto;}
+.inline-rules.open{display:block;}
+
+/* ══════════════════════════════════════════
+   PAGE 4 — SUMMARY
+══════════════════════════════════════════ */
+.summary-wrap{max-width:820px;margin:0 auto;padding:32px 24px;width:100%;}
+.summary-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;gap:20px;}
+.summary-header h2{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--white);}
+.summary-header .session-pill{font-family:'DM Mono',monospace;font-size:10px;color:var(--dust);background:var(--plate);border:1px solid var(--slate);padding:6px 12px;border-radius:4px;text-align:right;line-height:1.8;}
+.stats-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px;}
+.stat-c{background:var(--plate);border:1px solid var(--slate);border-radius:6px;padding:16px;text-align:center;}
+.stat-c .sn{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;line-height:1;}
+.stat-c .sl{font-family:'DM Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--dust);margin-top:4px;}
+.sn-high{color:var(--high);}
+.sn-med{color:var(--med);}
+.sn-low{color:var(--low);}
+.sn-ore{color:var(--ore);}
+
+.finding-card{background:var(--plate);border:1px solid var(--slate);border-radius:6px;margin-bottom:10px;overflow:hidden;}
+.finding-card-header{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line);}
+.fc-fac{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--white);flex:1;}
+.fc-code{font-family:'DM Mono',monospace;font-size:10px;background:var(--ore);color:var(--coal);padding:2px 7px;border-radius:3px;}
+.fc-count{font-family:'DM Mono',monospace;font-size:10px;color:var(--high);background:var(--high-bg);border:1px solid var(--high-b);padding:2px 6px;border-radius:3px;}
+.finding-row{display:flex;align-items:flex-start;gap:12px;padding:10px 16px;border-bottom:1px solid var(--line);}
+.finding-row:last-child{border-bottom:none;}
+.sev-pill{font-family:'DM Mono',monospace;font-size:9px;padding:2px 7px;border-radius:3px;flex-shrink:0;margin-top:2px;}
+.pill-high{background:var(--high-bg);color:var(--high);border:1px solid var(--high-b);}
+.pill-med{background:var(--med-bg);color:var(--med);border:1px solid var(--med-b);}
+.pill-low{background:var(--low-bg);color:var(--low);border:1px solid var(--low-b);}
+.finding-item-name{font-size:12px;color:var(--mist);font-weight:500;flex:1;}
+.finding-note{font-size:11px;color:var(--dust);margin-top:2px;}
+
+.no-findings{text-align:center;padding:48px;color:var(--dust);font-size:13px;}
+.no-findings .nf-icon{font-size:40px;margin-bottom:12px;}
+
+.summary-actions{display:flex;gap:10px;margin-top:24px;flex-wrap:wrap;}
+
+/* ══════════════════════════════════════════
+   PAGE 5 — REFERENCE
+══════════════════════════════════════════ */
+.ref-layout{display:grid;grid-template-columns:280px 1fr;flex:1;overflow:hidden;}
+.ref-sidebar{border-right:1px solid var(--slate);display:flex;flex-direction:column;background:var(--rock);overflow:hidden;}
+.ref-sidebar-hdr{padding:16px 18px 12px;border-bottom:1px solid var(--slate);}
+.ref-sidebar-hdr h3{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--ash);margin-bottom:9px;}
+.ref-list{flex:1;overflow-y:auto;padding:4px 0;scrollbar-width:thin;scrollbar-color:var(--slate) transparent;}
+.ref-btn{display:flex;align-items:center;width:100%;padding:8px 18px;background:none;border:none;border-left:3px solid transparent;cursor:pointer;gap:9px;text-align:left;transition:all .12s;}
+.ref-btn:hover{background:rgba(200,135,58,.07);}
+.ref-btn.active{background:rgba(200,135,58,.14);border-left-color:var(--ore);}
+.rb-code{font-family:'DM Mono',monospace;font-size:10px;color:var(--ore);min-width:22px;}
+.rb-name{font-size:12px;color:var(--mist);flex:1;}
+.ref-btn.active .rb-name{color:var(--white);font-weight:500;}
+.rb-count{font-family:'DM Mono',monospace;font-size:9px;color:var(--dust);background:var(--coal);padding:1px 5px;border-radius:6px;}
+.ref-btn.active .rb-count{background:var(--ore-d);color:var(--ore-l);}
+.ref-rdot{width:5px;height:5px;border-radius:50%;background:var(--ore);opacity:.6;}
+
+.ref-content{display:flex;flex-direction:column;overflow:hidden;}
+.ref-content-inner{flex:1;overflow-y:auto;padding:32px 48px;scrollbar-width:thin;scrollbar-color:var(--slate) transparent;}
+.ref-welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;opacity:.4;text-align:center;}
+.ref-welcome .rw-icon{font-size:52px;margin-bottom:18px;}
+.ref-welcome h3{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--ash);margin-bottom:6px;}
+.ref-welcome p{font-size:13px;color:var(--dust);max-width:260px;line-height:1.6;}
+
+.ref-detail{display:none;}
+.ref-detail.show{display:block;animation:fadeUp .2s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.ref-breadcrumb{font-family:'DM Mono',monospace;font-size:10px;color:var(--dust);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px;}
+.ref-breadcrumb span{color:var(--ore);}
+.ref-dtop{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--slate);}
+.ref-dtitle{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--white);line-height:1.1;}
+.ref-badges{display:flex;flex-direction:column;align-items:flex-end;gap:5px;}
+
+.ref-tabs{display:flex;border-bottom:1px solid var(--slate);margin-bottom:20px;}
+.rt-btn{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:8px 16px;background:none;border:none;color:var(--dust);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;}
+.rt-btn:hover{color:var(--mist);}
+.rt-btn.active{color:var(--ore);border-bottom-color:var(--ore);}
+.rt-pane{display:none;}
+.rt-pane.active{display:block;animation:fadeUp .18s ease;}
+
+/* checklist grid */
+.cl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px;}
+.cl-item{display:flex;align-items:flex-start;gap:9px;padding:9px 12px;background:var(--plate);border:1px solid var(--slate);border-radius:4px;transition:all .13s;}
+.cl-item:hover{border-color:rgba(200,135,58,.4);}
+.cl-item.ticked{border-color:rgba(74,140,92,.45);background:rgba(74,140,92,.07);}
+.cl-num{font-family:'DM Mono',monospace;font-size:10px;color:var(--ore);min-width:20px;padding-top:1px;}
+.cl-text{font-size:12px;color:var(--mist);flex:1;line-height:1.4;}
+.cl-box{width:15px;height:15px;border:1.5px solid var(--slate);border-radius:3px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:9px;transition:all .13s;margin-top:2px;}
+.cl-box:hover{border-color:var(--ore);}
+.cl-item.ticked .cl-box{background:var(--low);border-color:var(--low);color:white;}
+
+/* progress mini */
+.prog-mini{background:var(--plate);border:1px solid var(--slate);border-radius:5px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:14px;}
+.prog-pct{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--ore);min-width:44px;}
+.prog-track{flex:1;height:4px;background:var(--slate);border-radius:2px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--ore-d),var(--ore-l));border-radius:2px;transition:width .35s ease;}
+.prog-nums{font-family:'DM Mono',monospace;font-size:10px;color:var(--dust);min-width:80px;text-align:right;}
+
+/* rules table */
+.rtable{width:100%;border-collapse:collapse;}
+.rtable th{font-family:'DM Mono',monospace;font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--ash);background:var(--coal);padding:7px 12px;text-align:left;border:1px solid var(--slate);}
+.rtable td{font-size:12px;padding:8px 12px;border:1px solid var(--slate);vertical-align:top;line-height:1.5;}
+.rtable tr:nth-child(odd) td{background:var(--plate);}
+.rtable tr:nth-child(even) td{background:rgba(20,20,20,.5);}
+.rtable td:first-child{color:var(--mist);font-weight:500;width:38%;}
+.rtable td:last-child{color:var(--ash);}
+.rtable tr:hover td{background:rgba(200,135,58,.05);}
+
+/* rule-checklist */
+.rule-cl{list-style:none;display:flex;flex-direction:column;gap:3px;}
+.rule-gh{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--ore-l);padding:5px 10px;background:rgba(200,135,58,.1);border-left:3px solid var(--ore);border-radius:0 3px 3px 0;margin:10px 0 4px;}
+.rule-gi{font-size:12px;color:var(--mist);padding:7px 10px;background:var(--plate);border:1px solid var(--slate);border-radius:4px;line-height:1.45;display:flex;gap:7px;}
+.ri-ico{color:var(--ore);flex-shrink:0;font-size:10px;padding-top:2px;}
+
+/* pointer */
+.ptr-group{margin-bottom:14px;}
+.ptr-gh{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--ore-l);margin-bottom:6px;}
+.ptr-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:5px;}
+.ptr-item{font-size:12px;color:var(--mist);padding:7px 10px;background:var(--plate);border:1px solid var(--slate);border-radius:4px;line-height:1.4;}
+
+/* ── REPORT MODAL ── */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:999;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+.modal-bg.open{display:flex;}
+.modal{background:var(--plate);border:1px solid var(--slate);border-radius:8px;width:min(700px,92vw);max-height:85vh;overflow-y:auto;padding:32px;position:relative;scrollbar-width:thin;scrollbar-color:var(--slate) transparent;}
+.modal-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--ash);cursor:pointer;font-size:18px;line-height:1;}
+.modal-close:hover{color:var(--mist);}
+.modal h2{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--white);margin-bottom:4px;}
+.modal .modal-sub{font-size:12px;color:var(--dust);margin-bottom:20px;}
+.report-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;margin-bottom:20px;padding:16px;background:var(--rock);border-radius:5px;border:1px solid var(--slate);}
+.rm-item{font-size:12px;color:var(--ash);}<b style="color:var(--mist)"></b>
+.rm-item b{color:var(--mist);}
+.report-section{margin-bottom:20px;}
+.report-section h4{font-family:'DM Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--ore);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--slate);}
+.report-fac-block{margin-bottom:14px;}
+.rfb-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--white);margin-bottom:6px;}
+.rfb-item{display:flex;align-items:flex-start;gap:10px;padding:6px 10px;background:var(--rock);border-radius:3px;margin-bottom:4px;font-size:12px;}
+.rfb-sev{flex-shrink:0;font-family:'DM Mono',monospace;font-size:9px;padding:1px 6px;border-radius:3px;}
+.rfb-item-name{color:var(--mist);}
+.rfb-note{color:var(--dust);font-style:italic;}
+.modal-actions{display:flex;gap:10px;margin-top:20px;padding-top:20px;border-top:1px solid var(--slate);}
+
+/* ── MISC ── */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--slate);border-radius:3px;}
+.section-label{padding:9px 16px 3px;font-family:'DM Mono',monospace;font-size:9px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--dust);}
+.no-results{padding:16px;text-align:center;font-family:'DM Mono',monospace;font-size:11px;color:var(--dust);display:none;}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--low);color:white;font-family:'DM Mono',monospace;font-size:11px;padding:10px 18px;border-radius:4px;z-index:9999;transform:translateY(60px);opacity:0;transition:all .3s;pointer-events:none;}
+.toast.show{transform:translateY(0);opacity:1;}
+.empty-state{text-align:center;padding:40px;color:var(--dust);font-size:13px;opacity:.6;}
+
+@media print{
+  .topnav,.inspect-sidebar,.ref-sidebar,.summary-actions,.modal-actions{display:none!important;}
+  .main,.ref-layout,.inspect-layout{display:block!important;}
+  body,html{overflow:auto;}
+  .page.active{overflow:auto;display:block;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="nav-brand">
+    <div class="nav-hex">⛏</div>
+    <div class="nav-brand-text">
+      <h1>Inspeksi Tambang</h1>
+      <p>Mining Safety System</p>
+    </div>
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" data-page="setup" onclick="goPage('setup',this)">
+      <span class="tab-icon">🪪</span> Setup Sesi
+    </button>
+    <button class="nav-tab" data-page="select" onclick="goPage('select',this)" id="tab-select">
+      <span class="tab-icon">🗂</span> Pilih Fasilitas
+    </button>
+    <button class="nav-tab" data-page="inspect" onclick="goPage('inspect',this)" id="tab-inspect">
+      <span class="tab-icon">🔍</span> Inspeksi
+      <span class="badge" id="finding-badge" style="display:none">0</span>
+    </button>
+    <button class="nav-tab" data-page="summary" onclick="goPage('summary',this)" id="tab-summary">
+      <span class="tab-icon">📊</span> Ringkasan
+    </button>
+    <button class="nav-tab" data-page="reference" onclick="goPage('reference',this)">
+      <span class="tab-icon">📋</span> Referensi Aturan
+    </button>
+  </div>
+  <div class="nav-right">
+    <div class="session-info" id="sessionInfo">
+      <div>Belum ada sesi aktif</div>
+      <div>Mulai dari tab Setup</div>
+    </div>
+  </div>
+</nav>
+
+<div class="main">
+
+<!-- ══════════ PAGE: SETUP ══════════ -->
+<div class="page active" id="page-setup">
+  <div class="setup-wrap">
+    <h2>Setup Sesi Inspeksi</h2>
+    <p class="sub">Isi informasi dasar sebelum memulai inspeksi lapangan.</p>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Nama Inspektur</label>
+        <input type="text" id="inp-inspector" placeholder="Nama lengkap" value="">
+      </div>
+      <div class="form-group">
+        <label>Perusahaan / IUP</label>
+        <input type="text" id="inp-company" placeholder="Nama perusahaan">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Lokasi / Site</label>
+        <input type="text" id="inp-location" placeholder="Nama site tambang">
+      </div>
+      <div class="form-group">
+        <label>Tanggal Inspeksi</label>
+        <input type="date" id="inp-date">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Nomor Laporan</label>
+      <input type="text" id="inp-report-no" placeholder="cth: INSP/TW1/2026/001">
+    </div>
+    <div class="form-group">
+      <label>Catatan Umum</label>
+      <input type="text" id="inp-notes-general" placeholder="Kondisi cuaca, akses, dsb.">
+    </div>
+    <div class="divider"></div>
+    <button class="btn-primary" onclick="startSession()">▶ Mulai Sesi Inspeksi</button>
+    <div id="session-status" style="margin-top:14px;font-family:'DM Mono',monospace;font-size:11px;color:var(--dust);"></div>
+  </div>
+</div>
+
+<!-- ══════════ PAGE: SELECT FACILITIES ══════════ -->
+<div class="page" id="page-select">
+  <div class="select-wrap">
+    <div class="fac-list-panel">
+      <div class="panel-header">
+        <h3>Pilih Fasilitas yang Akan Diinspeksi</h3>
+        <div class="search-row">
+          <input class="search-inp" id="sel-search" placeholder="Cari fasilitas..." oninput="filterSelList(this.value)">
+        </div>
+      </div>
+      <div class="fac-scroll" id="sel-list"></div>
+      <div class="no-results" id="sel-no-results">Tidak ditemukan</div>
+    </div>
+    <div class="fac-right-panel">
+      <div class="selected-summary">
+        <h3>Fasilitas Dipilih</h3>
+        <p id="sel-count-text">Belum ada fasilitas dipilih</p>
+        <div class="selected-chips" id="selected-chips"></div>
+      </div>
+      <div style="padding:16px 24px;flex:1;overflow-y:auto;">
+        <p style="font-size:12px;color:var(--dust);line-height:1.7;">
+          Pilih fasilitas yang akan Anda inspeksi hari ini. Setiap fasilitas akan muncul dalam tab <b style="color:var(--mist)">Inspeksi</b> lengkap dengan daftar pemeriksaan dan aturan teknisnya.<br><br>
+          <span style="color:var(--ore)">●</span> = Fasilitas memiliki aturan teknis tersedia.
+        </p>
+      </div>
+      <div class="start-btn-wrap">
+        <button class="btn-primary" onclick="goToInspect()">▶ Mulai Inspeksi Fasilitas Dipilih</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ PAGE: INSPECT ══════════ -->
+<div class="page" id="page-inspect">
+  <div class="inspect-layout">
+    <div class="inspect-sidebar">
+      <div class="panel-header">
+        <h3 style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--white);">Fasilitas Dipilih</h3>
+      </div>
+      <div class="inspect-fac-list" id="inspect-fac-list"></div>
+    </div>
+    <div class="inspect-main">
+      <div class="inspect-header" id="inspect-header">
+        <div style="color:var(--dust);font-size:13px;font-style:italic;">Pilih fasilitas dari panel kiri</div>
+      </div>
+      <div class="inspect-content" id="inspect-content">
+        <div class="empty-state">
+          <div style="font-size:40px;margin-bottom:12px;">🔍</div>
+          <div>Pilih fasilitas dari panel kiri untuk mulai mengisi temuan.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ PAGE: SUMMARY ══════════ -->
+<div class="page" id="page-summary">
+  <div class="summary-wrap">
+    <div class="summary-header">
+      <div>
+        <h2>Ringkasan Temuan Inspeksi</h2>
+        <p style="font-size:13px;color:var(--dust);margin-top:4px;">Semua ketidaksesuaian yang dicatat selama sesi ini.</p>
+      </div>
+      <div class="session-pill" id="sum-session-pill">—</div>
+    </div>
+    <div class="stats-cards" id="sum-stats"></div>
+    <div id="sum-findings"></div>
+    <div class="summary-actions">
+      <button class="btn-primary" onclick="openReport()">📄 Laporan Lengkap</button>
+      <div class="export-wrap" id="export-wrap">
+        <button class="btn-primary" style="background:var(--ore-d);" onclick="toggleExportMenu()">⬇ Export ▾</button>
+        <div class="export-dropdown" id="export-dropdown">
+          <div class="export-opt" onclick="doExport('pptx')">
+            <span class="eo-icon">📊</span>
+            <span class="eo-label">Export ke PowerPoint</span>
+            <span class="eo-ext">.pptx</span>
+          </div>
+          <div class="export-opt" onclick="doExport('docx')">
+            <span class="eo-icon">📝</span>
+            <span class="eo-label">Export ke Word</span>
+            <span class="eo-ext">.docx</span>
+          </div>
+        </div>
+      </div>
+      <button class="btn-ghost" onclick="goPage('inspect',document.querySelector('[data-page=inspect]'))">← Kembali</button>
+      <button class="btn-ghost" style="margin-left:auto;" onclick="resetAll()">↺ Reset Sesi</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ PAGE: REFERENCE ══════════ -->
+<div class="page" id="page-reference">
+  <div class="ref-layout">
+    <div class="ref-sidebar">
+      <div class="ref-sidebar-hdr">
+        <h3>Fasilitas Lapangan</h3>
+        <input class="search-inp" id="ref-search" placeholder="Cari fasilitas..." oninput="filterRefList(this.value)" style="width:100%;">
+      </div>
+      <div class="ref-list" id="ref-list"></div>
+      <div class="no-results" id="ref-no-results">Tidak ditemukan</div>
+    </div>
+    <div class="ref-content">
+      <div class="ref-content-inner" id="ref-content-inner">
+        <div class="ref-welcome">
+          <div class="rw-icon">📋</div>
+          <h3>Referensi Aturan</h3>
+          <p>Pilih fasilitas untuk melihat daftar pemeriksaan dan parameter teknis yang berlaku.</p>
+        </div>
+        <div class="ref-detail" id="ref-detail"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /.main -->
+
+<!-- REPORT MODAL -->
+<div class="modal-bg" id="report-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeReport()">✕</button>
+    <h2>Laporan Inspeksi Tambang</h2>
+    <p class="modal-sub">Dokumen ringkasan resmi — siap cetak</p>
+    <div id="report-body"></div>
+    <div class="modal-actions">
+      <button class="btn-primary" onclick="window.print()">🖨 Cetak Laporan</button>
+      <button class="btn-ghost" onclick="closeReport()">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ════════════════════════════════════════
+// DATA
+// ════════════════════════════════════════
+const CATEGORIES = [
+  { id:'A', label:'Temuan Administrasi', codes:['A1','A2','A3','A4','A5','A6'] },
+  { id:'B', label:'Fasilitas Lapangan',  codes:null }  // null = semua kode selain kategori A
+];
+
+const FACILITIES = [
+  // ── KATEGORI A: TEMUAN ADMINISTRASI ──
+  {code:"A1",name:"Studi Kelayakan",      cat:"A",items:["Kelengkapan dokumen Studi Kelayakan","Kesesuaian FS dengan kegiatan aktual","Pemutakhiran/revisi FS","Persetujuan FS dari instansi berwenang","Rekomendasi FS yang ditindaklanjuti"]},
+  {code:"A2",name:"RKAB",                 cat:"A",items:["Kelengkapan dokumen RKAB","Persetujuan RKAB","Realisasi vs Rencana produksi RKAB","Realisasi vs Rencana pengupasan RKAB","Realisasi vs Rencana reklamasi RKAB","Pelaporan realisasi RKAB"]},
+  {code:"A3",name:"Laporan Berkala",      cat:"A",items:["Laporan Triwulan (tepat waktu)","Laporan Semester (tepat waktu)","Laporan Tahunan (tepat waktu)","Kelengkapan isi laporan","Kesesuaian data laporan dengan kondisi aktual"]},
+  {code:"A4",name:"Buku Tambang",         cat:"A",items:["Ketersediaan Buku Tambang","Pemutakhiran Buku Tambang","Kelengkapan isian Buku Tambang","Penandatanganan oleh KTT","Penyampaian ke instansi berwenang"]},
+  {code:"A5",name:"Personel",             cat:"A",items:["Kepala Teknik Tambang (KTT) — pengangkatan sah","Pengawas Operasional — sertifikasi & jumlah","Pengawas Teknis — sertifikasi & jumlah","Juru Ledak — KIM & KPP (jika ada peledakan)","Tenaga Teknis Pertambangan lainnya","Daftar personel & struktur organisasi"]},
+  {code:"A6",name:"Administrasi Lain",    cat:"A",items:["IUP / IUPK — masa berlaku & lingkup","Persetujuan Lingkungan (AMDAL/UKL-UPL)","Izin-izin pendukung (air, peledakan, dll)","Kesesuaian kegiatan dengan izin yang dimiliki","Dokumen lain yang dipersyaratkan regulasi"]},
+
+  {code:"A",cat:"B",name:"Front Penambangan",items:["Longsoran lereng pit","Dimensi Lereng Pit","Pemantauan Pergerakan Lereng Pit","Drainase Front Penambangan","Dewatering Sump (Pompa dan saluran penyaliran)","P2H Alat Gali, Muat, dan Angkut","Kegiatan Peledakan","Pengawas Kegiatan Penambangan dan Penimbunan","Pengaturan jalur keluar masuk Front Penambangan","Match Factor Unit","Cycle Time","Pit Limit","Pengecekan Fatigue","Kompetensi & Permit Operator"]},
+  {code:"B",cat:"B",name:"Area Disposal",items:["Longsoran lereng Disposal","Dimensi Lereng Disposal","Pemantauan Pergerakan Lereng Disposal","Drainase Area Disposal","P2H Alat Angkut dan Support","Pengawas Kegiatan Penimbunan","Pengaturan jalur keluar masuk Penimbunan","Jarak Dumping","Unit Support Area Disposal (Dozzer)","Disposal limit","Pengecekan Fatigue","Kompetensi & Permit Operator"]},
+  {code:"C",cat:"B",name:"Timbunan Top Soil",items:["Papan Informasi (Volume & Lokasi)","Tanggul Area Top Soil","Drainase Area Top Soil","Cover Crop Area Top Soil"]},
+  {code:"D",cat:"B",name:"Jalan Tambang/Produksi",items:["Geometri Jalan (Lebar, Grade, Crossfall)","Rambu Jalan Tambang/Produksi","Kecepatan Unit","Jarak Beriringan","Pengelolaan Debu Jalan","Tanggul, Separator, Persimpangan Jalan","Pengecekan Fatigue","Pemeliharaan Jalan Tambang/Produksi"]},
+  {code:"E",cat:"B",name:"Area Reklamasi",items:["Kondisi Lahan Reklamasi (Penataan)","Sarana Kendali Erosi","Kondisi Pertumbuhan Tanaman","Tanaman Sisipan","Papan Informasi Area Reklamasi","Rambu","Redisturb Lahan Reklamasi"]},
+  {code:"F",cat:"B",name:"Fasilitas Pembibitan/Nursery",items:["Kapasitas Area Pembibitan","Papan Informasi Nursery","Layout Area Pembibitan dan Perawatan","Logbook Nursery","Fasilitas Penyiraman","Kondisi Bibit","Kondisi Bangunan Nursery","Papan Penamaan Jenis Tanaman","Pengelolaan Limbah B3 & Non B3/Domestik","Rambu","APD Pekerja","Alat Keselamatan","Kompetensi Pengelola"]},
+  {code:"G",cat:"B",name:"Settling Pond",items:["Konstruksi Settling Pond","Titik Penaatan","Pengukuran Kualitas Air Limbah","Fasilitas Pencampuran Bahan kimia","Gudang Bahan Kimia","Kapasitas Settling Pond","Tanggul Settling Pond","Pintu Air/Outlet","Papan Informasi dan Pendataan","Pemeliharaan Settling Pond","Rambu Peringatan","Akses Pengambilan Sampel"]},
+  {code:"H",cat:"B",name:"Workshop (Bengkel)",items:["Ketersediaan Workshop Permanent","Kapasitas Workshop","Dimensi Area Perbaikan (Bay)","Crane","Forklift","SOP","Sistem LOTO","Oil Trap","Tabung Gas","Drainase","Washing Pad","Demarkasi","Rambu","Bengkel Fabrikasi","Bengkel Tyre","Instalasi Kelistrikan","Penangkal Petir","House Keeping","Sampah Non B3 dan Domestik","Kotak P3K","Rumah Genset","Alat Kerja (Tools)","Spill Kit","APD","Kompetensi Personel"]},
+  {code:"I",cat:"B",name:"TPS Limbah B3",items:["Ketersedian TPS Limbah B3","Kapasitas TPS","Kondisi Bangunan TPS","Layout Bangunan","Logbook Limbah B3","MSDS Bahan Kimia","Penempatan Limbah","Demarkasi Area","Rambu","APD","Instalasi Kelistrikan","Sticker Limbah B3","Ceceran Oli","Drainase dan Pit","Spill kit","Eyewash","Kotak P3K","Penggunaan Bahan Kimia","Mesin Potong dan Press"]},
+  {code:"J",cat:"B",name:"Gudang Umum",items:["Kapasitas Gudang","Kondisi Bangunan Gudang","Demarkasi","Penyusunan/Penempatan Spare Part & Barang lainnya","Alat Angkat, Angkut, dan alat bantu","Pencahayaan","Kotak P3K","APD","Instalasi Kelistrikan","Tabung Gas Bertekanan","Alat Keselamatan","House Keeping"]},
+  {code:"K",cat:"B",name:"Gudang Bahan Peledak",items:["Hydrant & APAR","Penangkal Petir","Pagar Pengaman","Tanggul","Papan Peringatan","Pos Jaga dan Pos Pantau","CCTV","Personel Pemegang KIM dan KPP","Lampu Penerangan","APAR","Rumput dan tanaman sekitar","Alarm","Bangunan Gudang (Atap, Dinding, Pintu, Ventilasi)","Termometer","Buku Catatan (logbook)","Mixing Plant"]},
+  {code:"L",cat:"B",name:"Tanki BBC",items:["Hydrant, Sprinkler & APAR","Penangkal Petir dan Tanahan Pembumian","Tanda Peringatan","Lantai Tanki dan Tanggul","Tangga","Instalasi Kelistrikan","Penomoran/Identitas Tanki","Ventilasi/Air Breather","Pagar Pengaman","Oil Trap","Rambu","Fasilitas Pengisian Tanki & Penyaluran BBC","Rerumputan sekitar area tanki"]},
+  {code:"M",cat:"B",name:"Pengolahan dan/atau Pemurnian",items:["Sistem dan metode pengolahan","Control Room","Hopper/Room Bin","Fasilitas Ban Berjalan","Crucher","Screener","Pencucian Batubara/Ore","Pencampuran Batubara/Mineral","Sisa Hasil Pengolahan","SOP","Kelayakan Peralatan","Pesawat Angkat","House Keeping","Limbah B3","Silo","APD & Alat Keselamatan","Sistem Detoksifikasi","Bahan Kimia","Windshock","Kelistrikan, Penerangan, MCC Panel","Rambu","Walkways","Kebisingan","Radiasi","Pekerjaan Risiko Tinggi","APAR","Material Flameable/Korosif","Emergency Access","Muster Point","Kesehatan kerja","Sistem Drainase","Waterpond Buangan Pencucian"]},
+  {code:"N",cat:"B",name:"Stockpile",items:["Jalur Keluar Masuk","Tanggul","Drainase","Tumpukan Ore/Umpan","Tumpukan Produk","Sampling Umpan dan Produk","SOP","APD","Unit Support","Stacker Reclaimer","Pengelolaan Debu","Swabakar (Batubara)"]},
+  {code:"O",cat:"B",name:"Pelabuhan",items:["Konstruksi Dermaga","Fasilitas Pemuatan (Conveyor, Barging, dll)","SOP","Muster Point","Kelistrikan dan Penerangan","Alat Pelindung Diri & Keselamatan","APD","Pengelolaan Debu","Pesawat Angkat","Limbah B3","Saluran Drainase","Kegiatan Barging/Pemuatan"]},
+  {code:"P",cat:"B",name:"Laboratorium",items:["Akreditasi Labaratorium Uji","Kalibrasi Peralatan Pengujian","Pengelolaan Limbah B3 Laboratorium","Kontrol Kualitas Hasil Pengujian","Demarkasi","Rambu","Instalasi Kelistrikan","Pengelolaan limbah Non B3 dan Sampah","APD","Kompetensi Personel"]},
+  {code:"Q",cat:"B",name:"Tailing Storage Facility",items:["Konstruksi/Tanggul TSF","Sistem/Pipa Penyaluran Tailing","Detoksifikasi Limbah Cair","Pemantauan TSF","Instrument Pemantauan TSF","Sumur Pemantauan TSF","Area Pengambilan Sampel Tailing","Aliran Tailing & Ponding Water","Loading Clay/Tailing","Spillway Air","Pompa Dekant (Pompa Return)"]},
+  {code:"R",cat:"B",name:"Klinik",items:["Fasilitas Klinik","Ambulance","Kondisi Peralatan Pelatihan Keadaan Darurat","Jalur Evakuasi","Kelistrikan dan Penerangan","Drainase","Sanitasi dan Higiene","House Keeping","APAR","Kotak P3K","Muster Point"]},
+  {code:"S",cat:"B",name:"Kantor",items:["Kondisi Bangunan","Jalur Evakuasi","Kelistrikan dan Penerangan","House Keeping","APAR","Kotak P3K","Muster Point","Kebersihan","Pengelolaan Non B3 dan Sampah","Ergonomi Alat & Ruang Kerja"]},
+  {code:"T",cat:"B",name:"Mess/Camp",items:["Kondisi Bangunan","Jalur Evakuasi","Kelistrikan dan Penerangan","House Keeping","APAR","Kotak P3K","Muster Point","Kebersihan","Pengelolaan Non B3 dan Sampah"]},
+  {code:"U",cat:"B",name:"Kantin",items:["Kondisi Bangunan","Jalur Evakuasi","Kelistrikan dan Penerangan","House Keeping","APAR","Kotak P3K","Muster Point","Sanitasi dan Higiene","Pengelolaan Non B3 dan Sampah","Pengelolaan Gizi","Pakaian Khusus Memasak","Kelayakan Peralatan Memasak"]},
+  {code:"V",cat:"B",name:"Tanda Batas",items:["Kegiatan Perawatan dan Pemeliharaan","Kondisi Fisik Tanda Batas","Area Bebas Patok Tanda Batas","Kegiatan Pengukuran & Pemasangan"]},
+  {code:"W",cat:"B",name:"Area Eksplorasi",items:["P2H Peralatan Eksplorasi","APD Kegiatan Pengeboran","Pengelolaan Air dan Limbah B3 Kegiatan Pengeboran","Sungkup Pengaman Bagian Berputar","Dimensi Parit/Sumur Uji","SOP","Kompetensi personel","Pengelolaan Limbah B3 dan Sampah","Penggunaan Bahan Kimia","Penanganan Sampel"]},
+  {code:"X",cat:"B",name:"Coresheed",items:["Ketersedian Fasilitas Coresheed","Kapasitas Coresheed","Kalayakan (beratap, ventilasi, dll)","Penomoran & Pencatatan Identitas Sampel","Penataan Rak Sampel","Kelistrikan dan Penerangan","Demarkasi","Alat Preparasi Sampel","Pengelolaan Sisa Sampel/Pemusnahan","Kompetensi Personel","SOP"]},
+  {code:"Y",cat:"B",name:"Kegiatan Konstruksi",items:["Kesesuaian Lokasi","Peralatan Kegiatan Konstruksi (Mobile Crane, Forklift, dll)","Drainase","Alat Keselamatan & APD","Isolasi/Pengamanan Area","Penanganan Limbah","Kompetensi Tenaga Pelaksana"]},
+  {code:"Z",cat:"B",name:"Tambang Bawah Tanah",items:["Penyanggaan","Kualitas Udara & Ventilasi","Terowongan (Raise, Drift, Crosscut, dll)","Kelistrikan dan Penerangan","Alat Muat dan Angkut","Alat Komunikasi","Fasilitas Emergency, Alat Keselamatan & APD","Pemboran & Peledakan","Peralatan Pemantauan Lingkungan Kerja","Limbah B3","Amblasan Permukaan","Kecepatan Unit","Jarak Iring"]},
+  {code:"AA",cat:"B",name:"Kapal Isap / Kapal Keruk",items:["Kemajuan Penambangan/Kontrol Area Kerja","Kelistrikan dan Penerangan","Tanki Ponton dan Pompa","Alat Navigasi dan Komunikasi","Konstruksi Bangunan Kapal","Pesawat Angkat","Kelaikan Mesin Kapal","Ceceran Oli dan BBM","Alat Pengolahan Bijih","Alat Keselamatan, APD & Fasilitas Keadaan Darurat","Jangkar","Alat gali (Rantai Mangkok atau Cutter Suction, Sling)","House Keeping","Hot Work","Kualitas Air Permukaan"]},
+  {code:"AB",cat:"B",name:"Tambang Semprot",items:["Penyaliran","Peralatan Tambang Semprot","Penyimpanan Sementara Mineral","Kelistrikan dan Penerangan","Jalan Tambang/Produksi","Kolong","Land Clearing","Pengelolaan Tanah Pucuk","Air Kerja","Alat Pelindung Diri & Keselamatan"]},
+  {code:"AC",cat:"B",name:"Standardisasi & Usaha Jasa",items:["Kesesuaian Kegiatan Lapangan dengan bidang/subbidang pada IUJP","Kesesuaian Tenaga Ahli dengan Bidang/Sub Bidang","Kesesuaian Peralatan dengan Bidang/Sub Bidang","Tempat Pelatihan"]},
+  {code:"AD",cat:"B",name:"Pascatambang",items:["Reklamasi dan Revegetasi","Kestabilan Lereng Final","Pengamanan Sisa B3","Kualitas Tanah","Erosi dan Sedimentasi","Pembongkaran Fasilitas"]}
+];
+
+const RULES = {
+  "A":{type:"checklist",title:"Aturan Teknis Front Penambangan",groups:[{h:"1. Perencanaan Penggalian",items:["Penggalian dilakukan sesuai rencana penambangan.","Terdapat rencana kerja teknis penggalian yang mencakup rencana harian dan mingguan.","Rencana harian dan mingguan tersedia untuk diperiksa oleh Inspektur Tambang sewaktu-waktu."]},{h:"Isi Rencana Harian dan Mingguan",items:["Geometri dan dimensi penggalian tercantum.","Elevasi dan volume penggalian tercantum.","Jenis dan jumlah peralatan serta metode penggalian tercantum.","Rencana jalan tambang tercantum."]},{h:"2. Pelaksanaan Penggalian",items:["Penggalian batubara dilakukan segera setelah lapisan roof dibersihkan.","Dilakukan kontrol kualitas (grade/quality control) sebelum penggalian.","Kemajuan penggalian didokumentasikan dalam peta kemajuan tambang."]},{h:"3. Kondisi Area Kerja Penggalian",items:["Front penambangan memiliki sistem penyaliran yang mampu mengalirkan debit air larian tertinggi.","Luasan area kerja penggalian cukup untuk operasional peralatan minimal 7 hari produksi.","Area pemuatan memiliki daya dukung tanah yang memadai untuk alat gali-muat dan alat angkut terberat."]},{h:"4. Metode Penggalian",items:["Penggalian dimulai dari sisi highwall menuju lowwall.","Tinggi dinding penggalian tidak melebihi jangkauan efektif alat gali-muat terbesar."]},{h:"Lereng — Faktor Keamanan",items:["Lereng tambang keseluruhan dihitung menggunakan kuat geser puncak.","Lereng tunggal dan lereng timbunan dihitung menggunakan kuat geser residual.","Jika FK tidak memenuhi, dilakukan kajian teknis mencakup: geometri lereng, umur pakai, faktor keamanan, upaya penguatan, rencana pemantauan, dan tindak lanjut."]},{h:"Lereng Akhir Penambangan",items:["Pengaturan lereng akhir sesuai dokumen studi kelayakan yang disetujui.","Proses pembentukan lereng akhir mencegah overbreak akibat peledakan.","Baris terakhir lubang ledak berjarak ≥ 2 × tinggi lereng tunggal dari rencana lereng akhir.","Pada crest lereng terdapat tanggul pengaman: tinggi minimal 1 m + 4% dari tinggi lereng."]}]},
+  "B":{type:"checklist",title:"Aturan Teknis Area Disposal / Penimbunan",groups:[{h:"1. Lokasi Penimbunan",items:["Penimbunan batuan penutup tidak ditempatkan pada area yang memiliki sumber daya atau cadangan mineral/batubara.","Jika ditempatkan pada area sumber daya/cadangan, kajian teknis telah disampaikan kepada Kepala Inspektur Tambang."]},{h:"2. Geometri dan Stabilitas Timbunan",items:["Lereng tunggal timbunan: rasio vertikal : horizontal = 1 : 2 (kemiringan 50%) atau sesuai kajian teknis.","Jika FK tidak memenuhi, dilakukan kajian teknis mencakup: geometri, umur pakai, faktor keamanan, penguatan, pemantauan, dan tindak lanjut."]},{h:"3. Persiapan Area Timbunan",items:["Lokasi penimbunan memiliki daya dukung tanah yang memadai.","Area penimbunan telah dilakukan pengupasan tanah pucuk (topsoil) terlebih dahulu.","Tidak dilakukan penimbunan pada bekas kolam, bekas alur sungai, atau rawa — kecuali berdasarkan kajian teknis."]},{h:"4. Metode Penimbunan",items:["Bottom Up: dilakukan pemadatan bertahap menggunakan compactor, atau rasio ketebalan layer ≤ 1/3 tinggi alat angkut.","Sistem Curah: berdasarkan kajian teknis mencakup kestabilan, kepadatan, dan rekomendasi sudut lereng."]},{h:"In Pit Dump",items:["Dasar area timbunan bebas dari lapisan batuan yang berpotensi menjadi bidang gelincir.","Dasar area bebas dari air dan/atau lumpur.","Jarak antara kaki timbunan dengan area kerja aktif ≥ 3 × tinggi total timbunan atau sesuai kajian teknis."]}]},
+  "C":{type:"pointer",title:"Aturan Stock Top Soil di Pertambangan Indonesia",groups:[{h:"📋 Dasar Hukum",items:["UU No. 3 Tahun 2020 – Pertambangan Minerba","PP No. 78 Tahun 2010 – Reklamasi dan Pascatambang","Permen ESDM No. 26 Tahun 2018 – Good Mining Practice","Kepmen ESDM No. 1827 K/30/MEM/2018 – Pedoman Teknis Pertambangan yang Baik"]},{h:"📍 Lokasi Stockpile",items:["Lahan datar, topografi lebih rendah dari sekitar","Tidak jauh dari area pengupasan","Di luar zona penambangan aktif","Tidak berada di jalur aliran air utama"]},{h:"🏗️ Teknis Fisik",items:["Tanggul pembatas min. 1 meter di sekeliling tumpukan","Dasar stockpile dipadatkan dan diberi lapisan kedap air","Tinggi timbunan direncanakan (maks. 5 meter)","Kemiringan permukaan menjamin drainase & stabilitas","Drainase: parit keliling + kolam pengendap (settling pond)","Bebas dari genangan air"]},{h:"🌱 Pemeliharaan",items:["Min. 70% permukaan stockpile harus tertutup vegetasi penutup (cover crop)","Pembuatan mulsa dan bangunan pengendali erosi","Perawatan dan pemadatan berkala untuk menjaga unsur hara"]},{h:"🧪 Standar Kualitas Top Soil",items:["Bulk density (BD) ≤ 1,5 g/cm³","Porositas ≥ 40–50%","Proporsi liat : pasir = 1:2 atau 1:3","Kelarutan natrium/magnesium sulfat ≤ 5%"]},{h:"💰 Jaminan & Sanksi",items:["Dana jaminan reklamasi wajib ditempatkan (ditetapkan per 5 tahun)","Sanksi tidak melaksanakan reklamasi: pidana maks. 5 tahun + denda maks. Rp100 miliar"]}]},
+  "D":{type:"table",title:"Parameter Teknis Jalan Tambang",headers:["Parameter","Ketentuan"],rows:[["Lebar jalan 2 arah","Min. 3,5 × lebar alat angkut terbesar"],["Lebar jalan 1 arah","Min. 2 × lebar alat angkut terbesar"],["Kemiringan memanjang (grade)","Maks. 10–12%"],["Kemiringan melintang (cross fall)","Min. 2%"],["Sudut belokan pertigaan","Min. 70°"],["Tanggul pengaman","Min. ¾ diameter roda terbesar"],["Separator persimpangan","Min. ½ diameter roda terbesar"],["Rambu peringatan","Dipasang 50–180 m dari titik bahaya"],["Drainase","Wajib mampu menampung debit air larian tertinggi"],["Inspeksi & pemeliharaan","Harian dan mingguan"]]},
+  "E":{type:"table",title:"Parameter Penting Area Reklamasi",headers:["Parameter","Ketentuan"],rows:[["Kewajiban reklamasi","IUP & IUPK Operasi Produksi (wajib)"],["Batas waktu mulai reklamasi","Maks. 30 hari setelah tambang berhenti"],["Bentuk reklamasi","Revegetasi dan/atau nonrevegetasi"],["Pemeliharaan pasca tanam","Min. 3 tahun"],["Target keberhasilan","100% sebelum pengembalian wilayah"],["Pencairan jaminan","Mulai bisa dicairkan jika ≥ 60%"],["Jangka jaminan reklamasi","Per 5 tahun"],["Laporan tahunan","Paling lambat 31 Januari"],["Laporan pascatambang","Triwulanan"],["Sanksi pidana","Maks. 5 tahun + denda Rp100 miliar"]]},
+  "G":{type:"table",title:"Parameter Teknis Settling Pond",headers:["Parameter","Ketentuan"],rows:[["Kewajiban","Wajib dimiliki setiap kegiatan tambang"],["Bentuk","Trapesium (direkomendasikan)"],["Kapasitas","Min. 1,25 × debit curah hujan 84 jam"],["Kedalaman","±1–4 meter"],["Kompartemen","Min. 4 zona: sediment, safety, treatment, mud"],["Baku mutu outlet (batubara)","pH 6–9, TSS ≤400 mg/l, Fe ≤7 mg/l, Mn ≤4 mg/l"],["Pemantauan harian","pH dan TSS"],["Pemantauan bulanan","pH, TSS, Fe, Mn"],["Inspeksi struktur","Min. 1 bulan sekali"],["Persetujuan operasi","Persetujuan Teknis + SLO dari pemerintah"]]},
+  "H":{type:"table",title:"Parameter Teknis Bengkel/Workshop Tambang",headers:["Aspek","Ketentuan"],rows:[["Kebersihan & kerapian","Wajib selalu bersih, rapi, tidak mencemari lingkungan"],["Ventilasi","Min. 10% dari luas lantai (SNI 03-6572-2001)"],["Pagar tangga","Min. tinggi 90 cm"],["APAR","Wajib tersedia cukup sesuai jenis & luas bengkel"],["Proteksi < 5.000 kg","Pemadam otomatis di dalam"],["Proteksi ≥ 5.000 kg","Hidran di luar dengan air bertekanan"],["Las bertekanan tinggi","Wajib welding procedure specification"],["Bensin/thinner","Dilarang di ruang tertutup tanpa ventilasi"],["Bak tampung tumpahan","Min. 110% kapasitas tangki/kontainer terbesar"],["Pengawas Teknis","Wajib ditunjuk KTT untuk seluruh fasilitas bengkel"],["Kajian teknis konstruksi","Wajib disampaikan ke KAPIT min. 1 bulan sebelum pembangunan"]]},
+  "I":{type:"table",title:"Parameter Teknis TPS Limbah B3",headers:["Aspek","Ketentuan"],rows:[["Perizinan","Pertek + SLO (terintegrasi Persetujuan Lingkungan)"],["Luas minimum bangunan","Min. 20 m²"],["Tebal dinding","Min. 15 cm"],["Lantai","Kedap air, cat epoxy, kemiringan maks. 1% ke bak tampung"],["Ventilasi","Min. 10% dari luas lantai ruangan"],["Bak tampung cair","Min. 110% volume kemasan terbesar"],["Jarak antar kemasan","Min. 60 cm"],["Masa simpan > 50 kg/hari","Maks. 90 hari"],["Masa simpan < 50 kg/hari","Maks. 180 hari"],["Masa simpan oli bekas","Maks. 365 hari"],["Label & simbol","Wajib (standar GHS)"],["Sanksi pidana","Penjara 1–15 tahun + denda Rp1–15 miliar"]]},
+  "J":{type:"table",title:"Parameter Teknis Gudang Umum",headers:["Aspek","Ketentuan"],rows:[["Kajian teknis konstruksi","Wajib disampaikan ke KAPIT min. 1 bulan sebelum pembangunan (jika di area sumber daya)"],["Ventilasi","Min. 10% dari luas lantai ruangan (SNI 03-6572-2001)"],["Atap","Bahan tidak mudah terbakar"],["Penerangan","Memadai; explosion proof untuk area berbahaya"],["Proteksi kebakaran < 5.000 kg","Pemadam otomatis di dalam"],["Proteksi kebakaran ≥ 5.000 kg","Hidran di luar dengan air bertekanan"],["APAR","Wajib tersedia sesuai jenis dan luas gudang"],["Jalur evakuasi","Wajib tersedia, bebas rintangan, diberi marka"],["Pemisahan material","Per zona sesuai jenis dan karakteristik"],["Bahan kimia","Wajib MSDS/LDKB + label, dilarang makan/minum di area penyimpanan"],["Administrasi","Kartu stok, logbook, laporan berkala"],["Inspeksi","Harian, mingguan, bulanan, tahunan"]]},
+  "K":{type:"table",title:"Parameter Teknis Gudang Bahan Peledak",headers:["Aspek","Ketentuan"],rows:[["Perizinan","Wajib izin KaIT, kapasitas ditetapkan tertulis"],["Masa berlaku izin","Maks. 5 tahun, dapat diperpanjang"],["Detonator","Gudang tersendiri, dilarang campur dengan handak lain"],["Atap","Seringan mungkin (agar ledakan ke atas)"],["Besi tersingkap","Tidak boleh ada sampai 3 m dari lantai"],["Alat penyalur petir","Nilai < 5 ohm"],["Pagar pengaman","Min. tinggi 2,5 m + kawat berduri, jarak min. 5 m dari tanggul"],["Tanggul pengaman","Tinggi 2 m, lebar atas 1 m"],["Hidran","Wajib jika kapasitas ≥ 5.000 kg"],["Termometer","Wajib, dicatat harian"],["Lampu di dalam gudang","Hanya senter kedap gas"],["Sepatu besi","Dilarang masuk"],["Korek api","Dilarang masuk"],["Pengecekan gudang","Setiap minggu oleh petugas berwenang"],["Laporan ke KaIT","Setiap 3 bulan (buku catatan)"]]},
+  "L":{type:"table",title:"Parameter Teknis Tangki BBC",headers:["Aspek","Ketentuan"],rows:[["Standar konstruksi","SNI 13-3501-2002, API 650, API 653"],["Tanggul tunggal","Kapasitas tangki + 20 cm"],["Tanggul sekumpulan tangki","½ × total kapasitas + 20 cm"],["Pagar pengaman","Jarak min. 5 m dari tanggul"],["Penangkal petir","Tahanan pembumian ≤ 5 ohm"],["Pengukuran penangkal petir","Setiap 6 bulan atau setelah petir hebat"],["Pipa breather","3 lapis kawat kasa kuningan"],["Tangki pendam — kedalaman tanam","Min. 1 m dari bagian atas tangki"],["SPBC — oil trap","Wajib ada"],["Pemeriksaan berkala tangki timbun","Maks. 2 tahun"],["Pengujian berkala tangki timbun","Maks. 5 tahun"],["NDT + hydro test","Wajib jika umur tangki > 15 tahun"],["Pelaporan BBC","Setiap 6 bulan kepada KaIT"]]},
+  "M":{type:"table",title:"Parameter Teknis Fasilitas Pengolahan dan Pemurnian",headers:["Aspek","Ketentuan"],rows:[["Kewajiban","Wajib dilakukan di dalam negeri (UU Minerba Pasal 103)"],["Izin khusus","IUP OP Khusus Pengolahan dan/atau Pemurnian"],["Masa berlaku izin","30 tahun + perpanjangan 20 tahun per kali"],["Kajian teknis konstruksi","Wajib ke KaIT min. 1 bulan sebelum pembangunan"],["Commissioning","Wajib disusun oleh Tenaga Teknis Berkompeten"],["PTL","Wajib ditunjuk dan disahkan KaIT"],["Ahli pengolahan/pemurnian","Wajib memiliki kartu kompetensi yang disahkan KaIT"],["Pemeliharaan peralatan","Wajib terjadwal, dilaksanakan oleh Tenaga Teknis Berkompeten"],["Pencatatan produksi","Kadar & kuantitas umpan, produk, dan sisa hasil pengolahan"],["Pengelolaan tailing","Wajib memenuhi baku mutu lingkungan sebelum dilepas"],["Audit SMKP","Min. 1 kali per tahun (audit internal)"]]},
+  "N":{type:"table",title:"Parameter Teknis Stockpile Komoditas Pertambangan",headers:["Aspek","Ketentuan"],rows:[["Tanggul pembatas","Min. 1 meter di sekeliling area tumpukan"],["Akses","Masuk dan keluar alat angkut harus terpisah"],["Kapasitas minimum","Min. 3 hari kapasitas produksi harian"],["Pola penimbunan batubara","Cone Shell, Chevron, Chevcon, atau Windrow"],["Manajemen FIFO","Wajib diterapkan (first in first out)"],["Titik nyala swabakar","Penanganan segera jika suhu ≥ 120°C"],["Waktu potensi swabakar","5–6 minggu sejak penimbunan (sub-bituminus)"],["Pengecekan suhu","Berkala pada beberapa titik tumpukan"],["EOM survei","Setiap bulan untuk pendataan kuantitas"]]},
+  "R":{type:"table",title:"Parameter Teknis Klinik Kesehatan Pertambangan",headers:["Aspek","Ketentuan"],rows:[["Kewajiban","Wajib ada/diakses oleh seluruh pemegang IUP/IUPK"],["Kualifikasi Tingkat I","Jarak < 60 menit ke RS — min. P3K & gawat darurat"],["Kualifikasi Tingkat II","Jarak 60–150 menit ke RS — pelayanan medis dasar"],["Kualifikasi Tingkat III","Jarak > 150 menit ke RS — pelayanan spesialistik"],["Klinik 24 jam","Dokter wajib hadir setiap saat"],["Pemeriksaan berkala","Min. 1 kali/tahun (tambang permukaan & pengolahan)"],["Pemeriksaan berkala tambang bawah tanah","Min. 2 kali/tahun"],["Ruang P3K","Wajib jika ≥ 100 pekerja atau potensi bahaya tinggi"],["Ambulans","Wajib untuk klinik rawat inap"],["Penyelidikan PAK","Wajib selesai dalam 2 × 24 jam"],["Rawat inap maks.","5 hari, lebih dari itu wajib rujuk ke RS"]]}
+};
+
+// ════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════
+let session = {inspector:'',company:'',location:'',date:'',reportNo:'',notes:''};
+let selectedCodes = new Set();
+let findings = {}; // { code: { idx: { status:'find'|'ok'|'na', sev:'low'|'med'|'high', note:'' } } }
+let refChecked = {}; // reference tab ticks
+let currentInspectCode = null;
+
+// ════════════════════════════════════════
+// NAV
+// ════════════════════════════════════════
+function goPage(id, tabEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if (tabEl) tabEl.classList.add('active');
+  if (id === 'summary') buildSummary();
+}
+
+// ════════════════════════════════════════
+// SETUP
+// ════════════════════════════════════════
+document.getElementById('inp-date').value = new Date().toISOString().slice(0,10);
+
+function startSession() {
+  const insp = document.getElementById('inp-inspector').value.trim();
+  const comp = document.getElementById('inp-company').value.trim();
+  const loc  = document.getElementById('inp-location').value.trim();
+  const dt   = document.getElementById('inp-date').value;
+  if (!insp || !loc) { showToast('Isi Nama Inspektur dan Lokasi terlebih dahulu','#C94040'); return; }
+  session = { inspector:insp, company:comp, location:loc, date:dt,
+    reportNo: document.getElementById('inp-report-no').value.trim() || 'INSP/TW1/2026/001',
+    notes: document.getElementById('inp-notes-general').value.trim() };
+  document.getElementById('sessionInfo').innerHTML =
+    `<div><b>${session.inspector}</b></div><div>${session.location} · ${fmtDate(session.date)}</div>`;
+  buildSelList();
+  goPage('select', document.querySelector('[data-page=select]'));
+  showToast('Sesi dimulai — pilih fasilitas yang akan diinspeksi');
+}
+
+function fmtDate(d){ if(!d) return ''; const p=d.split('-'); return `${p[2]}/${p[1]}/${p[0]}`; }
+
+// ════════════════════════════════════════
+// SELECT FACILITIES
+// ════════════════════════════════════════
+function buildSelList() {
+  const list = document.getElementById('sel-list');
+  list.innerHTML = '';
+  CATEGORIES.forEach(cat => {
+    const facs = FACILITIES.filter(f => f.cat === cat.id);
+    // Category header
+    const hdr = document.createElement('div');
+    hdr.className = 'section-label';
+    hdr.textContent = cat.id + '. ' + cat.label;
+    list.appendChild(hdr);
+    facs.forEach(fac => {
+      const row = document.createElement('div');
+      row.className = 'fac-row' + (selectedCodes.has(fac.code) ? ' selected' : '');
+      row.dataset.code = fac.code;
+      row.dataset.name = fac.name.toLowerCase();
+      const hasr = RULES[fac.code] ? '<span class="has-dot" title="Ada aturan teknis"></span>' : '';
+      row.innerHTML = `<div class="fac-cb">${selectedCodes.has(fac.code)?'✓':''}</div><span class="fac-code">${fac.code}</span><span class="fac-name">${fac.name}</span>${hasr}<span class="fac-n">${fac.items.length}</span>`;
+      row.addEventListener('click', () => toggleFacility(fac.code, row));
+      list.appendChild(row);
+    });
+  });
+  updateChips();
+}
+
+function toggleFacility(code, row) {
+  if (selectedCodes.has(code)) { selectedCodes.delete(code); row.classList.remove('selected'); row.querySelector('.fac-cb').textContent = ''; }
+  else { selectedCodes.add(code); row.classList.add('selected'); row.querySelector('.fac-cb').textContent = '✓'; }
+  if (!findings[code]) findings[code] = {};
+  updateChips();
+}
+
+function filterSelList(q) {
+  const ql = q.toLowerCase();
+  let vis = 0;
+  document.querySelectorAll('#sel-list .fac-row').forEach(r => {
+    const m = r.dataset.name.includes(ql) || r.dataset.code.toLowerCase().includes(ql);
+    r.style.display = m ? 'flex' : 'none';
+    if (m) vis++;
+  });
+  document.querySelectorAll('#sel-list .section-label').forEach(hdr => {
+    let next = hdr.nextElementSibling;
+    let anyVis = false;
+    while (next && !next.classList.contains('section-label')) {
+      if (next.style.display !== 'none') anyVis = true;
+      next = next.nextElementSibling;
+    }
+    hdr.style.display = anyVis ? '' : 'none';
+  });
+  document.getElementById('sel-no-results').style.display = vis===0 ? 'block' : 'none';
+}
+
+function updateChips() {
+  const chips = document.getElementById('selected-chips');
+  const cnt = selectedCodes.size;
+  document.getElementById('sel-count-text').textContent = cnt > 0 ? `${cnt} fasilitas dipilih` : 'Belum ada fasilitas dipilih';
+  chips.innerHTML = '';
+  selectedCodes.forEach(code => {
+    const fac = FACILITIES.find(f=>f.code===code);
+    const chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.innerHTML = `<span>${fac.code} — ${fac.name}</span><span class="remove-chip" onclick="removeFac('${code}')">✕</span>`;
+    chips.appendChild(chip);
+  });
+}
+
+function removeFac(code) {
+  selectedCodes.delete(code);
+  buildSelList();
+}
+
+function goToInspect() {
+  if (selectedCodes.size === 0) { showToast('Pilih minimal 1 fasilitas terlebih dahulu','#C94040'); return; }
+  selectedCodes.forEach(code => { if (!findings[code]) findings[code] = {}; });
+  buildInspectSidebar();
+  goPage('inspect', document.querySelector('[data-page=inspect]'));
+  const first = [...selectedCodes][0];
+  openInspectFac(first);
+}
+
+// ════════════════════════════════════════
+// INSPECT
+// ════════════════════════════════════════
+function buildInspectSidebar() {
+  const list = document.getElementById('inspect-fac-list');
+  list.innerHTML = '';
+  // Group selected facilities by category, preserving FACILITIES order
+  CATEGORIES.forEach(cat => {
+    const facs = FACILITIES.filter(f => f.cat === cat.id && selectedCodes.has(f.code));
+    if (facs.length === 0) return;
+    const hdr = document.createElement('div');
+    hdr.className = 'section-label';
+    hdr.style.cssText = 'padding:10px 14px 3px;';
+    hdr.textContent = cat.id + '. ' + cat.label;
+    list.appendChild(hdr);
+    facs.forEach(fac => {
+      const btn = document.createElement('button');
+      btn.className = 'inspect-fac-btn';
+      btn.id = 'ifb-' + fac.code;
+      btn.innerHTML = `<span class="if-code">${fac.code}</span><span class="if-name">${fac.name}</span><span class="finding-count none" id="fc-${fac.code}">—</span>`;
+      btn.addEventListener('click', () => openInspectFac(fac.code));
+      list.appendChild(btn);
+    });
+  });
+}
+
+function openInspectFac(code) {
+  currentInspectCode = code;
+  const fac = FACILITIES.find(f=>f.code===code);
+  document.querySelectorAll('.inspect-fac-btn').forEach(b=>b.classList.remove('active'));
+  const btn = document.getElementById('ifb-'+code);
+  if (btn) btn.classList.add('active');
+
+  // Header
+  const fcount = Object.keys(findings[code]||{}).filter(k=>findings[code][k].status==='find').length;
+  document.getElementById('inspect-header').innerHTML = `
+    <div class="inspect-header-top">
+      <h2 class="inspect-title">${fac.name}</h2>
+    </div>
+    <div class="inspect-header-badges">
+      <span class="ihb ihb-code">${fac.code}</span>
+      <span class="ihb ihb-items">${fac.items.length} item</span>
+      ${fcount>0?`<span class="ihb ihb-findings">${fcount} temuan</span>`:''}
+    </div>`;
+
+  // Content
+  const content = document.getElementById('inspect-content');
+  content.innerHTML = '';
+
+  // Inline rules button if available
+  if (RULES[code]) {
+    const rb = document.createElement('div');
+    rb.style.cssText = 'margin-bottom:14px;';
+    rb.innerHTML = `<button class="rules-toggle" onclick="toggleInlineRules('inlrules-${code}',this)">▸ Lihat Aturan Teknis Fasilitas Ini</button><div class="inline-rules" id="inlrules-${code}">${buildRulesHTML(code)}</div>`;
+    content.appendChild(rb);
+  }
+
+  fac.items.forEach((item, idx) => {
+    const f = (findings[code]||{})[idx] || {};
+    const card = document.createElement('div');
+    card.className = 'item-card' + (f.status==='find'?' has-finding':(f.status==='ok'?' compliant':''));
+    card.id = `ic-${code}-${idx}`;
+
+    let statusBadge = '<span class="item-status-badge status-na">Belum</span>';
+    if (f.status==='ok') statusBadge = '<span class="item-status-badge status-ok">Sesuai ✓</span>';
+    if (f.status==='find') statusBadge = '<span class="item-status-badge status-find">Temuan !</span>';
+
+    card.innerHTML = `
+      <div class="item-top" onclick="toggleCard('${code}',${idx})">
+        <span class="item-num">${String(idx+1).padStart(2,'0')}</span>
+        <span class="item-label">${item}</span>
+        ${statusBadge}
+        <span class="item-expand">▾</span>
+      </div>
+      <div class="item-body">
+        <div class="status-row">
+          <button class="stn-btn ${f.status==='ok'?'active-ok':''}" onclick="setStatus('${code}',${idx},'ok',this)">✓ Sesuai</button>
+          <button class="stn-btn ${f.status==='find'?'active-find':''}" onclick="setStatus('${code}',${idx},'find',this)">⚠ Temuan</button>
+          <button class="stn-btn ${f.status==='na'?'active-na':''}" onclick="setStatus('${code}',${idx},'na',this)">— N/A</button>
+        </div>
+        <div class="severity-row" id="sevrow-${code}-${idx}" style="${f.status==='find'?'':'display:none'}">
+          <span class="sev-label">Tingkat:</span>
+          <button class="sev-btn ${f.sev==='low'?'active-low':''}" onclick="setSev('${code}',${idx},'low',this)">Rendah</button>
+          <button class="sev-btn ${f.sev==='med'?'active-med':''}" onclick="setSev('${code}',${idx},'med',this)">Sedang</button>
+          <button class="sev-btn ${f.sev==='high'?'active-high':''}" onclick="setSev('${code}',${idx},'high',this)">Tinggi</button>
+        </div>
+        <textarea class="notes-inp" placeholder="Catatan temuan / deskripsi kondisi..." oninput="setNote('${code}',${idx},this.value)">${f.note||''}</textarea>
+        <div class="reco-wrap${f.status==='find'?' show':''}" id="recowrap-${code}-${idx}">
+          <div class="reco-label">Rekomendasi Perbaikan</div>
+          <textarea class="reco-inp" placeholder="Tindakan perbaikan yang direkomendasikan..." oninput="setReco('${code}',${idx},this.value)">${f.reco||''}</textarea>
+        </div>
+      </div>`;
+    content.appendChild(card);
+  });
+}
+
+function toggleCard(code, idx) {
+  const card = document.getElementById(`ic-${code}-${idx}`);
+  card.classList.toggle('open');
+}
+
+function setStatus(code, idx, status, btn) {
+  if (!findings[code]) findings[code] = {};
+  if (!findings[code][idx]) findings[code][idx] = {};
+  findings[code][idx].status = status;
+  // Update card class
+  const card = document.getElementById(`ic-${code}-${idx}`);
+  card.classList.remove('has-finding','compliant');
+  if (status==='find') card.classList.add('has-finding');
+  if (status==='ok') card.classList.add('compliant');
+  // Update badge
+  card.querySelector('.item-status-badge').outerHTML =
+    status==='ok' ? '<span class="item-status-badge status-ok">Sesuai ✓</span>' :
+    status==='find' ? '<span class="item-status-badge status-find">Temuan !</span>' :
+    '<span class="item-status-badge status-na">N/A</span>';
+  // Severity row + reco wrap
+  const sevrow = document.getElementById(`sevrow-${code}-${idx}`);
+  if (sevrow) sevrow.style.display = status==='find'?'flex':'none';
+  const recowrap = document.getElementById(`recowrap-${code}-${idx}`);
+  if (recowrap) recowrap.classList.toggle('show', status==='find');
+  // Buttons active
+  card.querySelectorAll('.stn-btn').forEach(b=>b.classList.remove('active-ok','active-find','active-na'));
+  btn.classList.add(`active-${status==='na'?'na':status==='ok'?'ok':'find'}`);
+  updateFindingBadge();
+  updateFacBadge(code);
+}
+
+function setSev(code, idx, sev, btn) {
+  if (!findings[code]) findings[code] = {};
+  if (!findings[code][idx]) findings[code][idx] = {};
+  findings[code][idx].sev = sev;
+  const card = document.getElementById(`ic-${code}-${idx}`);
+  card.querySelectorAll('.sev-btn').forEach(b=>b.classList.remove('active-low','active-med','active-high'));
+  btn.classList.add(`active-${sev}`);
+}
+
+function setNote(code, idx, val) {
+  if (!findings[code]) findings[code] = {};
+  if (!findings[code][idx]) findings[code][idx] = {};
+  findings[code][idx].note = val;
+}
+
+function setReco(code, idx, val) {
+  if (!findings[code]) findings[code] = {};
+  if (!findings[code][idx]) findings[code][idx] = {};
+  findings[code][idx].reco = val;
+}
+
+function updateFindingBadge() {
+  let total = 0;
+  selectedCodes.forEach(code => {
+    Object.values(findings[code]||{}).forEach(f=>{ if(f.status==='find') total++; });
+  });
+  const badge = document.getElementById('finding-badge');
+  badge.textContent = total;
+  badge.style.display = total > 0 ? 'inline-block' : 'none';
+}
+
+function updateFacBadge(code) {
+  const fac = FACILITIES.find(f=>f.code===code);
+  const el = document.getElementById('fc-'+code);
+  if (!el) return;
+  const finds = Object.values(findings[code]||{}).filter(f=>f.status==='find').length;
+  const oks = Object.values(findings[code]||{}).filter(f=>f.status==='ok').length;
+  el.className = 'finding-count';
+  if (finds > 0) { el.classList.add('has'); el.textContent = `${finds} tmn`; }
+  else if (oks > 0) { el.classList.add('ok'); el.textContent = `${oks}/${fac.items.length}`; }
+  else { el.classList.add('none'); el.textContent = '—'; }
+}
+
+function toggleInlineRules(id, btn) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+  btn.textContent = el.classList.contains('open') ? '▾ Sembunyikan Aturan Teknis' : '▸ Lihat Aturan Teknis Fasilitas Ini';
+}
+
+function buildRulesHTML(code) {
+  const rule = RULES[code];
+  if (!rule) return '';
+  if (rule.type==='table') {
+    let h = `<table class="rtable"><thead><tr>${rule.headers.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>`;
+    rule.rows.forEach(r=>{ h+=`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`; });
+    return h+'</tbody></table>';
+  }
+  if (rule.type==='checklist') {
+    let h='';
+    rule.groups.forEach(g=>{ h+=`<div class="rule-gh">${g.h}</div>`; g.items.forEach(item=>{ h+=`<div class="rule-gi"><span class="ri-ico">☐</span>${item}</div>`; }); });
+    return h;
+  }
+  if (rule.type==='pointer') {
+    let h='';
+    rule.groups.forEach(g=>{ h+=`<div style="margin-bottom:8px"><div style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--ore-l);margin-bottom:4px">${g.h}</div>`; g.items.forEach(item=>{ h+=`<div style="font-size:11px;color:var(--mist);padding:4px 8px;background:var(--rock);border:1px solid var(--slate);border-radius:3px;margin-bottom:3px;line-height:1.4">${item}</div>`; }); h+='</div>'; });
+    return h;
+  }
+  return '';
+}
+
+// ════════════════════════════════════════
+// SUMMARY
+// ════════════════════════════════════════
+function buildSummary() {
+  // Session pill
+  document.getElementById('sum-session-pill').innerHTML =
+    `<div><b>${session.inspector||'—'}</b></div><div>${session.location||'—'}</div><div>${fmtDate(session.date)}</div>`;
+
+  // Stats
+  let totalFinds=0, high=0, med=0, low=0, totalFacs=0;
+  selectedCodes.forEach(code=>{
+    const finds = Object.values(findings[code]||{}).filter(f=>f.status==='find');
+    if (finds.length>0) totalFacs++;
+    finds.forEach(f=>{
+      totalFinds++;
+      if (f.sev==='high') high++;
+      else if (f.sev==='med') med++;
+      else low++;
+    });
+  });
+
+  document.getElementById('sum-stats').innerHTML = `
+    <div class="stat-c"><div class="stat-num sn-ore">${selectedCodes.size}</div><div class="stat-label">Fasilitas Diinspeksi</div></div>
+    <div class="stat-c"><div class="stat-num sn-high">${high}</div><div class="stat-label">Temuan Tinggi</div></div>
+    <div class="stat-c"><div class="stat-num sn-med">${med}</div><div class="stat-label">Temuan Sedang</div></div>
+    <div class="stat-c"><div class="stat-num sn-low">${low}</div><div class="stat-label">Temuan Rendah</div></div>`;
+
+  // Findings list
+  const container = document.getElementById('sum-findings');
+  container.innerHTML = '';
+
+  let anyFinding = false;
+  selectedCodes.forEach(code=>{
+    const fac = FACILITIES.find(f=>f.code===code);
+    const facFinds = Object.entries(findings[code]||{}).filter(([,f])=>f.status==='find');
+    if (facFinds.length===0) return;
+    anyFinding = true;
+    const card = document.createElement('div');
+    card.className = 'finding-card';
+    let rows = '';
+    facFinds.sort((a,b)=>{const order={high:0,med:1,low:2}; return (order[a[1].sev]||2)-(order[b[1].sev]||2);})
+    .forEach(([idx,f])=>{
+      const item = fac.items[parseInt(idx)];
+      const sevClass = f.sev==='high'?'pill-high':f.sev==='med'?'pill-med':'pill-low';
+      const sevLabel = f.sev==='high'?'TINGGI':f.sev==='med'?'SEDANG':'RENDAH';
+      rows += `<div class="finding-row">
+        <span class="sev-pill ${sevClass}">${sevLabel}</span>
+        <div style="flex:1">
+          <div class="finding-item-name">${item}</div>
+          ${f.note?`<div class="finding-note">📋 ${f.note}</div>`:''}
+          ${f.reco?`<div class="finding-note" style="color:var(--low);margin-top:2px">→ <b style="color:var(--low)">Rekomendasi:</b> ${f.reco}</div>`:''}
+        </div>
+      </div>`;
+    });
+    card.innerHTML = `<div class="finding-card-header">
+      <span class="fc-code">${fac.code}</span>
+      <span class="fc-fac">${fac.name}</span>
+      <span class="fc-count">${facFinds.length} temuan</span>
+    </div>${rows}`;
+    container.appendChild(card);
+  });
+
+  if (!anyFinding) {
+    container.innerHTML = `<div class="no-findings"><div class="nf-icon">✅</div><div>Tidak ada temuan ketidaksesuaian yang dicatat.</div></div>`;
+  }
+}
+
+// ════════════════════════════════════════
+// REPORT MODAL
+// ════════════════════════════════════════
+function openReport() {
+  buildReport();
+  document.getElementById('report-modal').classList.add('open');
+}
+function closeReport() { document.getElementById('report-modal').classList.remove('open'); }
+
+function buildReport() {
+  let high=0,med=0,low=0;
+  selectedCodes.forEach(code=>{
+    Object.values(findings[code]||{}).filter(f=>f.status==='find').forEach(f=>{
+      if(f.sev==='high')high++; else if(f.sev==='med')med++; else low++;
+    });
+  });
+
+  let facRows='';
+  selectedCodes.forEach(code=>{
+    const fac=FACILITIES.find(f=>f.code===code);
+    const facFinds=Object.entries(findings[code]||{}).filter(([,f])=>f.status==='find');
+    if(facFinds.length===0) return;
+    let items='';
+    facFinds.sort((a,b)=>{const o={high:0,med:1,low:2};return(o[a[1].sev]||2)-(o[b[1].sev]||2)})
+    .forEach(([idx,f])=>{
+      const item=fac.items[parseInt(idx)];
+      const sc=f.sev==='high'?'pill-high':f.sev==='med'?'pill-med':'pill-low';
+      const sl=f.sev==='high'?'TINGGI':f.sev==='med'?'SEDANG':'RENDAH';
+      items+=`<div class="rfb-item"><span class="rfb-sev ${sc}">${sl}</span><div style="flex:1"><div class="rfb-item-name">${item}</div>${f.note?`<div class="rfb-note">📋 ${f.note}</div>`:''} ${f.reco?`<div class="rfb-note" style="color:var(--low);margin-top:2px">→ Rekomendasi: ${f.reco}</div>`:''}</div></div>`;
+    });
+    facRows+=`<div class="report-fac-block"><div class="rfb-title">${fac.code} — ${fac.name} <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--high);font-weight:400">(${facFinds.length} temuan)</span></div>${items}</div>`;
+  });
+
+  document.getElementById('report-body').innerHTML = `
+    <div class="report-meta">
+      <div class="rm-item">Inspektur: <b>${session.inspector||'—'}</b></div>
+      <div class="rm-item">Perusahaan: <b>${session.company||'—'}</b></div>
+      <div class="rm-item">Lokasi/Site: <b>${session.location||'—'}</b></div>
+      <div class="rm-item">Tanggal: <b>${fmtDate(session.date)}</b></div>
+      <div class="rm-item">No. Laporan: <b>${session.reportNo||'—'}</b></div>
+      <div class="rm-item">Fasilitas Diinspeksi: <b>${selectedCodes.size}</b></div>
+    </div>
+    ${session.notes?`<div style="margin-bottom:16px;padding:10px 14px;background:var(--rock);border:1px solid var(--slate);border-radius:5px;font-size:12px;color:var(--ash)"><b style="color:var(--mist)">Catatan Umum:</b> ${session.notes}</div>`:''}
+    <div class="report-section">
+      <h4>Ringkasan Temuan</h4>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;">
+        <div style="background:var(--high-bg);border:1px solid var(--high-b);border-radius:4px;padding:10px;text-align:center">
+          <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--high)">${high}</div>
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--high);text-transform:uppercase">Tinggi</div>
+        </div>
+        <div style="background:var(--med-bg);border:1px solid var(--med-b);border-radius:4px;padding:10px;text-align:center">
+          <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--med)">${med}</div>
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--med);text-transform:uppercase">Sedang</div>
+        </div>
+        <div style="background:var(--low-bg);border:1px solid var(--low-b);border-radius:4px;padding:10px;text-align:center">
+          <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--low)">${low}</div>
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--low);text-transform:uppercase">Rendah</div>
+        </div>
+      </div>
+    </div>
+    ${facRows?`<div class="report-section"><h4>Detail Temuan per Fasilitas</h4>${facRows}</div>`:'<div style="text-align:center;padding:24px;color:var(--dust);font-size:13px">Tidak ada temuan ketidaksesuaian yang dicatat.</div>'}`;
+}
+
+// ════════════════════════════════════════
+// REFERENCE TAB
+// ════════════════════════════════════════
+function buildRefList() {
+  const list = document.getElementById('ref-list');
+  list.innerHTML = '';
+  CATEGORIES.forEach(cat => {
+    const facs = FACILITIES.filter(f => f.cat === cat.id);
+    const hdr = document.createElement('div');
+    hdr.className = 'section-label';
+    hdr.textContent = cat.id + '. ' + cat.label;
+    list.appendChild(hdr);
+    facs.forEach(fac => {
+      const btn = document.createElement('button');
+      btn.className = 'ref-btn';
+      btn.dataset.code = fac.code;
+      btn.dataset.name = fac.name.toLowerCase();
+      const dot = RULES[fac.code] ? '<span class="ref-rdot" title="Ada aturan teknis"></span>' : '';
+      btn.innerHTML = `<span class="rb-code">${fac.code}</span><span class="rb-name">${fac.name}</span>${dot}<span class="rb-count">${fac.items.length}</span>`;
+      btn.addEventListener('click', () => openRefFac(fac));
+      list.appendChild(btn);
+    });
+  });
+}
+
+function filterRefList(q){
+  const ql = q.toLowerCase();
+  let vis = 0;
+  document.querySelectorAll('#ref-list .ref-btn').forEach(b=>{
+    const m = b.dataset.name.includes(ql) || b.dataset.code.toLowerCase().includes(ql);
+    b.style.display = m ? 'flex' : 'none';
+    if (m) vis++;
+  });
+  // Hide category headers that have no visible items
+  document.querySelectorAll('#ref-list .section-label').forEach(hdr => {
+    let next = hdr.nextElementSibling;
+    let anyVis = false;
+    while (next && !next.classList.contains('section-label')) {
+      if (next.style.display !== 'none') anyVis = true;
+      next = next.nextElementSibling;
+    }
+    hdr.style.display = anyVis ? '' : 'none';
+  });
+  document.getElementById('ref-no-results').style.display = vis===0 ? 'block' : 'none';
+}
+
+function openRefFac(fac) {
+  document.querySelectorAll('.ref-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector(`.ref-btn[data-code="${fac.code}"]`).classList.add('active');
+  if(!refChecked[fac.code]) refChecked[fac.code]=new Set();
+
+  const welcome = document.querySelector('.ref-welcome');
+  const detail = document.getElementById('ref-detail');
+  welcome.style.display='none';
+  detail.className='ref-detail show';
+
+  const checked=refChecked[fac.code];
+  const done=checked.size, total=fac.items.length, pct=total>0?Math.round((done/total)*100):0;
+
+  let rulesHtml='';
+  if(RULES[fac.code]){
+    rulesHtml=`<div class="rt-pane" id="rtp-rules-${fac.code}">
+      <div class="rules-section" style="margin-bottom:20px">
+        <div style="font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--ore);margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid var(--slate)">${RULES[fac.code].title}</div>
+        ${buildRulesHTML(fac.code)}
+      </div>
+    </div>`;
+  }
+
+  detail.innerHTML=`
+    <div class="ref-breadcrumb">Referensi → Temuan Lapangan → <span>${fac.name}</span></div>
+    <div class="ref-dtop">
+      <h2 class="ref-dtitle">${fac.name}</h2>
+      <div class="ref-badges">
+        <span class="ihb ihb-code">${fac.code}</span>
+        <span class="ihb ihb-items">${fac.items.length} item pemeriksaan</span>
+      </div>
+    </div>
+    <div class="ref-tabs">
+      <button class="rt-btn active" onclick="refTab('checklist','${fac.code}',this)">☑ Checklist</button>
+      ${RULES[fac.code]?`<button class="rt-btn" onclick="refTab('rules','${fac.code}',this)">📋 Aturan & Parameter</button>`:''}
+    </div>
+    <div class="rt-pane active" id="rtp-checklist-${fac.code}">
+      <div class="prog-mini">
+        <span class="prog-pct" id="rpct-${fac.code}">${pct}%</span>
+        <div class="prog-track"><div class="prog-fill" id="rfill-${fac.code}" style="width:${pct}%"></div></div>
+        <span class="prog-nums" id="rnums-${fac.code}">${done}/${total} dicek</span>
+      </div>
+      <div class="cl-grid" id="rcl-${fac.code}">
+        ${fac.items.map((item,idx)=>{
+          const ticked=checked.has(idx);
+          return `<div class="cl-item${ticked?' ticked':''}" id="rci-${fac.code}-${idx}">
+            <span class="cl-num">${String(idx+1).padStart(2,'0')}</span>
+            <span class="cl-text">${item}</span>
+            <div class="cl-box" onclick="refTick('${fac.code}',${idx})">${ticked?'✓':''}</div>
+          </div>`;
+        }).join('')}
+      </div>
+      <div style="margin-top:12px;display:flex;gap:8px;">
+        <button class="btn-ghost" style="font-size:10px;padding:6px 14px;" onclick="refReset('${fac.code}')">↺ Reset</button>
+        <button class="btn-ghost" style="font-size:10px;padding:6px 14px;" onclick="window.print()">⎙ Cetak</button>
+      </div>
+    </div>
+    ${rulesHtml}`;
+}
+
+function refTab(tab, code, btn) {
+  document.querySelectorAll(`#ref-detail .rt-btn`).forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll(`#ref-detail .rt-pane`).forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  const pane = document.getElementById(`rtp-${tab}-${code}`);
+  if(pane){ pane.classList.add('active'); pane.style.animation=''; void pane.offsetWidth; pane.style.animation='fadeUp .2s ease'; }
+}
+
+function refTick(code, idx) {
+  if(!refChecked[code]) refChecked[code]=new Set();
+  const checked=refChecked[code];
+  const el=document.getElementById(`rci-${code}-${idx}`);
+  if(checked.has(idx)){ checked.delete(idx); el.classList.remove('ticked'); el.querySelector('.cl-box').textContent=''; }
+  else { checked.add(idx); el.classList.add('ticked'); el.querySelector('.cl-box').textContent='✓'; }
+  const done=checked.size, total=FACILITIES.find(f=>f.code===code).items.length;
+  const pct=total>0?Math.round((done/total)*100):0;
+  document.getElementById(`rpct-${code}`).textContent=pct+'%';
+  document.getElementById(`rfill-${code}`).style.width=pct+'%';
+  document.getElementById(`rnums-${code}`).textContent=`${done}/${total} dicek`;
+}
+
+function refReset(code) {
+  refChecked[code]=new Set();
+  const fac=FACILITIES.find(f=>f.code===code);
+  document.getElementById(`rpct-${code}`).textContent='0%';
+  document.getElementById(`rfill-${code}`).style.width='0%';
+  document.getElementById(`rnums-${code}`).textContent=`0/${fac.items.length} dicek`;
+  document.querySelectorAll(`#rcl-${code} .cl-item`).forEach(el=>{
+    el.classList.remove('ticked'); el.querySelector('.cl-box').textContent='';
+  });
+}
+
+// ════════════════════════════════════════
+// RESET SESSION
+// ════════════════════════════════════════
+function resetAll() {
+  if (!confirm('Reset semua data sesi ini? Semua temuan akan dihapus.')) return;
+  findings={}; selectedCodes=new Set(); currentInspectCode=null;
+  document.getElementById('sessionInfo').innerHTML='<div>Belum ada sesi aktif</div><div>Mulai dari tab Setup</div>';
+  document.getElementById('finding-badge').style.display='none';
+  goPage('setup', document.querySelector('[data-page=setup]'));
+  showToast('Sesi direset');
+}
+
+// ════════════════════════════════════════
+// TOAST
+// ════════════════════════════════════════
+function showToast(msg, color='#4A8C5C') {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.style.background=color;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// ════════════════════════════════════════
+// EXPORT — CLIENT-SIDE VIA CDN (no server needed)
+// ════════════════════════════════════════
+
+function toggleExportMenu() {
+  const dd = document.getElementById('export-dropdown');
+  dd.classList.toggle('open');
+  if (dd.classList.contains('open')) {
+    setTimeout(() => {
+      const close = (e) => {
+        if (!document.getElementById('export-wrap').contains(e.target)) {
+          dd.classList.remove('open');
+          document.removeEventListener('click', close);
+        }
+      };
+      document.addEventListener('click', close);
+    }, 10);
+  }
+}
+
+function buildExportPayload() {
+  const facFindings = [];
+  selectedCodes.forEach(code => {
+    const fac = FACILITIES.find(f => f.code === code);
+    const items = Object.entries(findings[code] || {})
+      .filter(([, f]) => f.status === 'find')
+      .sort((a, b) => { const o = { high: 0, med: 1, low: 2 }; return (o[a[1].sev] || 2) - (o[b[1].sev] || 2); })
+      .map(([idx, f]) => ({
+        itemName: fac.items[parseInt(idx)],
+        sev: f.sev || 'low',
+        note: f.note || '',
+        reco: f.reco || ''
+      }));
+    if (items.length > 0) facFindings.push({ facCode: code, facName: fac.name, items });
+  });
+  return {
+    inspector: session.inspector, company: session.company,
+    location: session.location, date: fmtDate(session.date),
+    reportNo: session.reportNo, generalNotes: session.notes,
+    findings: facFindings
+  };
+}
+
+function doExport(type) {
+  document.getElementById('export-dropdown').classList.remove('open');
+  if (type === 'pptx') exportPPTX();
+  else exportWord();
+}
+
+// ── EXPORT PPTX (PptxGenJS via CDN) ──────────────────────────
+function exportPPTX() {
+  if (typeof PptxGenJS === 'undefined') {
+    showToast('Library PPTX belum dimuat. Coba refresh halaman.', '#C94040'); return;
+  }
+  showToast('Membuat file PowerPoint...', '#4A7FA8');
+  const p = buildExportPayload();
+  setTimeout(() => {
+    try {
+      const pres = new PptxGenJS();
+      pres.layout = 'LAYOUT_16x9';
+      pres.title = 'Laporan Inspeksi - ' + (p.location || '');
+
+      const C = { dark:'1A1A1A', plate:'2A2A2A', slate:'383838', ore:'C8873A',
+        oreD:'8A5820', white:'FAF7F2', mist:'E0DBD0', ash:'999999',
+        high:'C94040', med:'C8A030', low:'4A8C5C' };
+
+      let totalF=0, hi=0, me=0, lo=0;
+      p.findings.forEach(f=>f.items.forEach(i=>{totalF++;
+        if(i.sev==='high')hi++; else if(i.sev==='med')me++; else lo++;}));
+
+      // ── COVER SLIDE ──
+      const s1 = pres.addSlide();
+      s1.background = { color: C.dark };
+      s1.addShape(pres.ShapeType.rect, { x:0, y:0, w:0.12, h:5.625, fill:{color:C.ore}, line:{color:C.ore} });
+      s1.addText('LAPORAN INSPEKSI', { x:0.45, y:0.35, w:9, h:0.4, fontSize:11, fontFace:'Georgia', bold:true, color:C.ore, charSpacing:8, margin:0 });
+      s1.addText('TAMBANG', { x:0.45, y:0.72, w:9, h:1.0, fontSize:54, fontFace:'Georgia', bold:true, color:C.white, margin:0 });
+      s1.addShape(pres.ShapeType.rect, { x:0.45, y:1.7, w:2.0, h:0.04, fill:{color:C.oreD}, line:{color:C.oreD} });
+      s1.addText(p.location || '—', { x:0.45, y:1.82, w:9, h:0.42, fontSize:20, fontFace:'Georgia', bold:true, color:C.ore, margin:0 });
+      const meta = [['INSPEKTUR',p.inspector||'—'],['PERUSAHAAN',p.company||'—'],['TANGGAL',p.date||'—'],['NO. LAPORAN',p.reportNo||'—']];
+      meta.forEach(([lbl,val],i)=>{ const x=i<2?0.45:5.2, y=i%2===0?2.55:3.05;
+        s1.addText(lbl, {x,y,w:4,h:0.22,fontSize:9,fontFace:'Georgia',color:C.ash,bold:true,charSpacing:4,margin:0});
+        s1.addText(val, {x,y:y+0.2,w:4,h:0.28,fontSize:13,fontFace:'Georgia',color:C.white,margin:0}); });
+      s1.addShape(pres.ShapeType.rect, { x:0.45, y:4.15, w:9.1, h:1.1, fill:{color:C.plate}, line:{color:C.slate} });
+      [[p.findings.length,'FASILITAS',C.ore],[totalF,'TEMUAN',C.white],[hi,'TINGGI',C.high],[me,'SEDANG',C.med],[lo,'RENDAH',C.low]]
+        .forEach(([val,lbl,col],i)=>{ const x=0.6+i*1.85;
+          s1.addText(String(val),{x,y:4.22,w:1.5,h:0.52,fontSize:28,fontFace:'Georgia',bold:true,color:col,align:'center',margin:0});
+          s1.addText(lbl,{x,y:4.72,w:1.5,h:0.3,fontSize:8,fontFace:'Georgia',color:C.ash,align:'center',charSpacing:3,margin:0}); });
+
+      // ── STATS SLIDE ──
+      const s2 = pres.addSlide();
+      s2.background = { color: C.dark };
+      s2.addShape(pres.ShapeType.rect,{x:0,y:0,w:10,h:0.7,fill:{color:C.plate},line:{color:C.slate}});
+      s2.addText('RINGKASAN STATISTIK',{x:0.4,y:0.14,w:9,h:0.42,fontSize:13,fontFace:'Georgia',bold:true,color:C.ore,charSpacing:6,margin:0});
+      [[hi,'Temuan Tinggi',C.high,'2A1A1A'],[me,'Temuan Sedang',C.med,'2A2210'],[lo,'Temuan Rendah',C.low,'1A2A1E'],[p.findings.length,'Fasilitas',C.ore,'241E14']]
+        .forEach(([val,lbl,col,bg],i)=>{ const x=0.35+i*2.35;
+          s2.addShape(pres.ShapeType.rect,{x,y:0.85,w:2.15,h:1.65,fill:{color:bg},line:{color:col}});
+          s2.addText(String(val),{x,y:0.95,w:2.15,h:0.9,fontSize:52,fontFace:'Georgia',bold:true,color:col,align:'center',valign:'middle',margin:0});
+          s2.addText(lbl.toUpperCase(),{x,y:1.83,w:2.15,h:0.5,fontSize:9,fontFace:'Georgia',color:col,align:'center',charSpacing:2,margin:0}); });
+
+      // Bar chart
+      if (p.findings.length > 0) {
+        const labels = p.findings.map(f=>f.facName.length>14?f.facName.slice(0,14)+'…':f.facName);
+        try {
+          s2.addChart(pres.ChartType.bar, [
+            {name:'Tinggi',labels,values:p.findings.map(f=>f.items.filter(i=>i.sev==='high').length)},
+            {name:'Sedang',labels,values:p.findings.map(f=>f.items.filter(i=>i.sev==='med').length)},
+            {name:'Rendah',labels,values:p.findings.map(f=>f.items.filter(i=>i.sev==='low').length)},
+          ],{x:0.35,y:2.65,w:9.3,h:2.7,barDir:'col',barGrouping:'stacked',
+            chartColors:[C.high,C.med,C.low],
+            chartArea:{fill:{color:C.plate}},plotArea:{fill:{color:C.plate}},
+            catAxisLabelColor:C.ash,catAxisFontSize:8,valAxisLabelColor:C.ash,valAxisFontSize:8,
+            valGridLine:{color:C.slate,size:0.5},catGridLine:{style:'none'},
+            showLegend:true,legendPos:'b',legendFontSize:9,legendColor:C.ash,
+            showValue:true,dataLabelColor:C.white,dataLabelFontSize:8});
+        } catch(e){}
+      }
+
+      // ── PER-FACILITY SLIDES ──
+      p.findings.forEach(fac => {
+        const sl = pres.addSlide();
+        sl.background = { color: C.dark };
+        sl.addShape(pres.ShapeType.rect,{x:0,y:0,w:10,h:0.78,fill:{color:C.plate},line:{color:C.slate}});
+        sl.addShape(pres.ShapeType.rect,{x:0,y:0,w:0.08,h:0.78,fill:{color:C.ore},line:{color:C.ore}});
+        sl.addShape(pres.ShapeType.rect,{x:0.15,y:0.08,w:0.65,h:0.32,fill:{color:C.ore},line:{color:C.ore}});
+        sl.addText(fac.facCode,{x:0.15,y:0.08,w:0.65,h:0.32,fontSize:9,fontFace:'Georgia',bold:true,color:C.dark,align:'center',valign:'middle',margin:0});
+        sl.addText(fac.facName.toUpperCase(),{x:0.9,y:0.1,w:7.6,h:0.38,fontSize:15,fontFace:'Georgia',bold:true,color:C.white,margin:0});
+        sl.addText(fac.items.length+' TEMUAN',{x:8.5,y:0.15,w:1.2,h:0.3,fontSize:9,fontFace:'Georgia',bold:true,color:C.high,align:'center',margin:0});
+
+        const maxRows = Math.min(fac.items.length, 6);
+        const rowH = 0.74;
+        fac.items.slice(0, maxRows).forEach((item, idx) => {
+          const y = 0.95 + idx * rowH;
+          const col = item.sev==='high'?C.high:item.sev==='med'?C.med:C.low;
+          const lbl = item.sev==='high'?'TINGGI':item.sev==='med'?'SEDANG':'RENDAH';
+          sl.addShape(pres.ShapeType.rect,{x:0.3,y,w:9.4,h:rowH-0.06,fill:{color:C.plate},line:{color:C.slate}});
+          sl.addShape(pres.ShapeType.rect,{x:0.3,y,w:0.06,h:rowH-0.06,fill:{color:col},line:{color:col}});
+          sl.addShape(pres.ShapeType.rect,{x:0.44,y:y+0.07,w:0.72,h:0.22,fill:{color:C.dark},line:{color:col}});
+          sl.addText(lbl,{x:0.44,y:y+0.07,w:0.72,h:0.22,fontSize:7,fontFace:'Georgia',bold:true,color:col,align:'center',valign:'middle',margin:0});
+          sl.addText(item.itemName,{x:1.24,y:y+0.05,w:8.4,h:0.28,fontSize:11,fontFace:'Georgia',bold:true,color:C.white,margin:0});
+          if (item.note) sl.addText('📋 '+item.note,{x:1.24,y:y+0.3,w:8.4,h:0.2,fontSize:8.5,fontFace:'Georgia',color:C.ash,italic:true,margin:0});
+          if (item.reco) sl.addText('→ Rekomendasi: '+item.reco,{x:1.24,y:y+(item.note?0.48:0.3),w:8.4,h:0.2,fontSize:8.5,fontFace:'Georgia',color:C.low,margin:0});
+        });
+        if (fac.items.length > maxRows)
+          sl.addText('+ '+(fac.items.length-maxRows)+' temuan lainnya (lihat laporan lengkap)',
+            {x:0.3,y:0.95+maxRows*rowH,w:9.4,h:0.28,fontSize:9,fontFace:'Georgia',color:C.ash,italic:true,margin:0});
+      });
+
+      // ── CLOSING SLIDE ──
+      const sL = pres.addSlide();
+      sL.background = { color: C.dark };
+      sL.addShape(pres.ShapeType.rect,{x:0,y:0,w:0.12,h:5.625,fill:{color:C.ore},line:{color:C.ore}});
+      sL.addText('TINDAK LANJUT',{x:0.4,y:1.5,w:9,h:0.4,fontSize:11,fontFace:'Georgia',bold:true,color:C.ore,charSpacing:8,margin:0});
+      sL.addText('Diperlukan',{x:0.4,y:1.88,w:9,h:1.0,fontSize:52,fontFace:'Georgia',bold:true,color:C.white,margin:0});
+      sL.addShape(pres.ShapeType.rect,{x:0.4,y:2.85,w:2.0,h:0.04,fill:{color:C.oreD},line:{color:C.oreD}});
+      sL.addText(hi+' temuan tinggi memerlukan tindak lanjut segera.',{x:0.4,y:3.0,w:9,h:0.38,fontSize:14,fontFace:'Georgia',color:C.mist,margin:0});
+      sL.addText('Disiapkan oleh '+(p.inspector||'Inspektur')+' — '+(p.date||''),{x:0.4,y:4.9,w:9,h:0.3,fontSize:9,fontFace:'Georgia',color:C.ash,margin:0});
+
+      const site = (p.location||'inspeksi').replace(/\s+/g,'_');
+      pres.writeFile({ fileName: 'Laporan_Inspeksi_'+site+'.pptx' })
+        .then(() => showToast('File PowerPoint berhasil diunduh ✓'))
+        .catch(e => { console.error(e); showToast('Gagal membuat PPTX: '+e.message,'#C94040'); });
+    } catch(e) {
+      console.error(e);
+      showToast('Gagal membuat PPTX: '+e.message,'#C94040');
+    }
+  }, 50);
+}
+
+// ── EXPORT WORD (.doc via HTML/MHTML trick) ───────────────────
+function exportWord() {
+  showToast('Membuat file Word...', '#4A7FA8');
+  const p = buildExportPayload();
+
+  let facRows = '';
+  p.findings.forEach(fac => {
+    let itemLines = '';
+    fac.items.forEach((item, i) => {
+      itemLines += `
+        <p style="margin:4pt 0 1pt 0;font-family:Arial;font-size:11pt;font-weight:bold;color:#111111">${i+1}.&nbsp;&nbsp;${item.itemName}</p>
+        <p style="margin:0 0 1pt 11pt;font-family:Arial;font-size:11pt;color:#111111">Temuan&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${item.note || '\u2014'}</p>
+        <p style="margin:0 0 6pt 11pt;font-family:Arial;font-size:11pt;color:#111111">Rekomendasi : ${item.reco || '\u2014'}</p>`;
+    });
+
+    facRows += `
+      <p style="font-family:Arial;font-size:12pt;font-weight:bold;color:#111111;margin:18pt 0 6pt 0;padding-bottom:3pt;border-bottom:1pt solid #333333">
+        ${fac.facCode}&nbsp;&ndash;&nbsp;${fac.facName}
+      </p>
+      ${itemLines}`;
+  });
+
+  const html = `<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="utf-8">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 15">
+<!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom><w:DoNotOptimizeForBrowser/></w:WordDocument></xml><![endif]-->
+<style>
+  @page  { size:A4 portrait; margin:2.5cm 2.5cm 2.5cm 2.5cm; }
+  body   { font-family:Arial; font-size:11pt; color:#111111; background:#FFFFFF; margin:0; padding:0; }
+  p      { margin:0; padding:0; }
+</style>
+</head>
+<body>
+  <p style="font-family:Arial;font-size:13pt;font-weight:bold;color:#111111;margin:0 0 2pt 0">Daftar Temuan Inspeksi</p>
+  <p style="font-family:Arial;font-size:10pt;color:#555555;margin:0 0 16pt 0">
+    ${p.location||'\u2014'}&nbsp;&nbsp;|&nbsp;&nbsp;${p.date||'\u2014'}&nbsp;&nbsp;|&nbsp;&nbsp;Inspektur:&nbsp;${p.inspector||'\u2014'}${p.reportNo?'&nbsp;&nbsp;|&nbsp;&nbsp;No.&nbsp;'+p.reportNo:''}
+  </p>
+  ${facRows || '<p style="font-family:Arial;font-size:11pt;color:#666;font-style:italic">Tidak ada temuan yang dicatat.</p>'}
+</body></html>`;
+
+  const blob = new Blob(['﻿', html], { type: 'application/msword' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  const site = (p.location || 'inspeksi').replace(/\s+/g, '_');
+  a.href     = url;
+  a.download = 'Temuan_Inspeksi_' + site + '.doc';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('File Word berhasil diunduh ✓');
+}
+
+// ════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════
+buildRefList();
+</script>
+</body>
+</html>
